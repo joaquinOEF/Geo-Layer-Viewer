@@ -1,23 +1,25 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { LAYER_CONFIGS, type LayerState } from "@/data/layer-configs";
+import { getLayersForCity, type LayerState } from "@/data/layer-configs";
 import { loadBoundaryData, loadLayerData } from "@/data/sample-data-loaders";
 import { sampleRasterAtPoint, geometryCentroid, linestringMidpoint } from "@/lib/valueTileUtils";
 import { createLayerFromData } from "@/lib/layerFactory";
+import { useCity } from "@/lib/cityContext";
 import Header from "@/components/layout/Header";
 import EvidenceDrawer from "./EvidenceDrawer";
 import LegendPanel from "./LegendPanel";
 import ValueTooltip from "./ValueTooltip";
 
 export default function MapViewer() {
+  const { city } = useCity();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
   const layerRefsMap = useRef<Map<string, L.Layer>>(new Map());
 
   const [layers, setLayers] = useState<LayerState[]>(
-    LAYER_CONFIGS.map((config) => ({
+    getLayersForCity(city.id).map((config) => ({
       ...config,
       enabled: false,
       loaded: false,
@@ -35,17 +37,17 @@ export default function MapViewer() {
 
     const initMap = async () => {
       try {
-        const boundaryData = await loadBoundaryData();
+        const boundaryData = await loadBoundaryData(city.id);
 
         if (!mapContainerRef.current || cancelled || mapRef.current) return;
 
         const center: [number, number] = boundaryData?.centroid
           ? [boundaryData.centroid[0], boundaryData.centroid[1]]
-          : [-30.0346, -51.2177];
+          : city.center;
 
         const map = L.map(mapContainerRef.current, {
           center,
-          zoom: 11,
+          zoom: city.defaultZoom,
           zoomControl: true,
           attributionControl: true,
         });
@@ -90,8 +92,8 @@ export default function MapViewer() {
         if (!mapContainerRef.current || mapRef.current) return;
 
         const map = L.map(mapContainerRef.current, {
-          center: [-30.0346, -51.2177],
-          zoom: 11,
+          center: city.center,
+          zoom: city.defaultZoom,
           zoomControl: true,
           attributionControl: true,
         });
@@ -207,7 +209,7 @@ export default function MapViewer() {
       );
 
       try {
-        const data = await loadLayerData(layerId);
+        const data = await loadLayerData(layerId, city.id);
         if (data) {
           const leafletLayer = createLayerFromData(layerId, data);
           if (leafletLayer) {
@@ -243,7 +245,7 @@ export default function MapViewer() {
         );
       }
     },
-    [layers]
+    [layers, city.id]
   );
 
   // Builds a Leaflet layer by filtering vector features against a raster threshold.
@@ -251,11 +253,11 @@ export default function MapViewer() {
   // each feature's centroid/midpoint, then keeps only features above the threshold.
   async function buildPostprocessedLayer(layerId: string): Promise<L.Layer | null> {
     if (layerId === "post_settlements_flood") {
-      const data = await loadLayerData("ibge_settlements");
+      const data = await loadLayerData("ibge_settlements", city.id);
       const geoJson = data?.geoJson || data;
       if (!geoJson?.features) return null;
 
-      const friConfig = LAYER_CONFIGS.find((l) => l.id === "oef_fri_2024");
+      const friConfig = layers.find((l) => l.id === "chirps_copdem_fri_2024");
       const enc = friConfig?.valueEncoding;
       if (!enc?.urlTemplate) return null;
 
@@ -302,11 +304,11 @@ export default function MapViewer() {
     }
 
     if (layerId === "post_bus_heatwave") {
-      const data = await loadLayerData("transit_routes");
+      const data = await loadLayerData("transit_routes", city.id);
       const geoJson = data?.type === "FeatureCollection" ? data : data?.geoJson || data;
       if (!geoJson?.features) return null;
 
-      const hwmConfig = LAYER_CONFIGS.find((l) => l.id === "oef_hwm_2024");
+      const hwmConfig = layers.find((l) => l.id === "era5land_hwm_2024");
       const enc = hwmConfig?.valueEncoding;
       if (!enc?.urlTemplate) return null;
 

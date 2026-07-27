@@ -1,6 +1,8 @@
 import { Link } from "wouter";
 import { ArrowLeft, ExternalLink, FlaskConical, CheckCircle2 } from "lucide-react";
 import { LAYER_CONFIGS, LAYER_GROUPS, LAYER_SECTIONS, type LayerConfig } from "@/data/layer-configs";
+import catalog from "@shared/generated/catalog.json";
+import { CITIES, getCity } from "@shared/cities";
 
 interface LayerDataInfo {
   id: string;
@@ -54,11 +56,12 @@ const ACCESS_COPERNICUS_DEM =
   "Also accessible server-side via Google Earth Engine (asset: COPERNICUS/DEM/GLO30).";
 
 function getRawDataAccess(layerId: string): string {
-  if (layerId.startsWith("oef_chirps_")) return ACCESS_CHIRPS;
-  if (layerId.startsWith("oef_era5_")) return ACCESS_ERA5;
-  if (layerId === "oef_hwm_2024" || layerId === "oef_hwm_clim") return ACCESS_ERA5;
-  if (layerId.startsWith("oef_hwm_") || layerId.startsWith("oef_fri_")) return ACCESS_OEF_COMPUTED;
-  if (layerId === "oef_copernicus_dem") return ACCESS_COPERNICUS_DEM;
+  if (layerId.startsWith("chirps_copdem_fri_")) return ACCESS_OEF_COMPUTED;
+  if (layerId.startsWith("era5land_hwm_2030s") || layerId.startsWith("era5land_hwm_2050s") || layerId.startsWith("era5land_hwm_2100s")) return ACCESS_OEF_COMPUTED;
+  if (layerId.startsWith("chirps_")) return ACCESS_CHIRPS;
+  if (layerId.startsWith("era5land_") || layerId.startsWith("era5_land_")) return ACCESS_ERA5;
+  if (layerId.startsWith("poa_") || layerId.startsWith("plymouth_")) return ACCESS_OEF_COMPUTED;
+  if (layerId === "copernicus_dem") return ACCESS_COPERNICUS_DEM;
   return ACCESS_GEE;
 }
 
@@ -173,7 +176,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Licensed under CC BY 4.0. Informal settlements are areas of particular social vulnerability and are important for targeting nature-based interventions that improve resilience.",
   },
   {
-    id: "oef_dynamic_world",
+    id: "dynamic_world",
     methodology: "Land use classification tiles from Google Dynamic World, a near-real-time 10m land use/land cover dataset derived from Sentinel-2 imagery. Pre-rendered visual tiles served from OEF S3 bucket.",
     source: "Google Dynamic World via OpenEarth Foundation",
     sourceUrl: "https://dynamicworld.app/",
@@ -183,7 +186,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "9-class land cover: water, trees, grass, flooded vegetation, crops, shrub/scrub, built area, bare ground, snow/ice. Tiles pre-generated for web map display.",
   },
   {
-    id: "oef_solar_tiles",
+    id: "global_solar_atlas",
     methodology: "Pre-rendered solar photovoltaic output potential tiles from the Global Solar Atlas v2. Pixel values represent PVOUT (kWh/kWp/day) encoded as visual colour tiles for web map overlay.",
     source: "Global Solar Atlas v2 — World Bank / Solargis via OpenEarth Foundation",
     sourceUrl: "https://globalsolaratlas.info/",
@@ -193,7 +196,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Visual tile layer showing spatial variation in solar energy potential. For neighbourhood-level statistics, use the Solar Potential vector layer.",
   },
   {
-    id: "oef_jrc_surface_water",
+    id: "jrc_global_surface_water",
     methodology: "Surface water transition classes derived from the JRC Global Surface Water v1.4 dataset, which tracks surface water presence in over 3 million km² of Landsat imagery from 1984 to 2021. The 'transition' band classifies each pixel as: no change (0), permanent water (1), new permanent water (2), lost permanent water (3), seasonal water (4), new seasonal (5), lost seasonal (6), seasonal-to-permanent change (7), permanent-to-seasonal change (8), ephemeral permanent (9), or ephemeral seasonal (10). Pre-rendered tiles served from OEF S3 bucket.",
     source: "JRC Global Surface Water v1.4 — Joint Research Centre (EC) via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
@@ -203,7 +206,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Useful for identifying areas where water extent has expanded (e.g. wetland recovery) or contracted (e.g. urban drainage). Permanent water gain/loss is particularly relevant to flood retention and NbS opportunity mapping. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_ghsl_built_up",
+    id: "ghsl_built_up",
     methodology: "Built-up surface area in m² per 100 m grid cell from the GHSL Built-Up Surface Grid (GHS-BUILT-S), produced under the Global Human Settlement Layer programme (P2023A release). Derived from Sentinel-2 (10 m) and Landsat (30 m) imagery using a supervised classifier trained on OpenStreetMap and Copernicus reference data. Pre-rendered visual tiles hosted on OEF S3.",
     source: "GHSL GHS-BUILT-S P2023A — JRC (Joint Research Centre, EC) via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_BUILT_S",
@@ -213,7 +216,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Built-up surface area (m²) per cell is a key input to the GHSL population disaggregation model and exposure scoring. High values indicate dense urban fabric; near-zero values indicate green or open land suitable for NbS. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_ghsl_urbanization",
+    id: "ghsl_degree_urbanization",
     methodology: "Degree of Urbanisation (SMOD) from the GHSL Settlement Model Grid (GHS-SMOD v2), implementing the Eurostat / UN Degree of Urbanisation methodology. Combines GHSL population grid and built-up grid at 1 km resolution to assign each cell to one of eight settlement classes ranging from water bodies and very-low-density rural areas through suburban clusters to urban centres. Pre-rendered tiles on OEF S3.",
     source: "GHSL GHS-SMOD v2.0 P2023A — JRC via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_SMOD_V2-0",
@@ -223,7 +226,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Settlement classes: Water (10), Very-low-density rural (11), Low-density rural (12), Rural cluster (13), Suburban/peri-urban (21), Semi-dense urban cluster (22), Dense urban cluster (23), Urban centre (30). Useful for identifying where urban heat island and impervious surface interventions are most impactful. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_hansen_forest",
+    id: "hansen_forest_change",
     methodology: "Forest loss (stand-replacement disturbance) from 2000 to 2024, derived from the Hansen Global Forest Change dataset v1.12 (University of Maryland / Google). Based on annual Landsat time-series analysis. The loss band is binary: 0 = no loss detected, 1 = stand-replacement disturbance (year of loss encoded separately in the lossyear band). Tiles show cumulative loss 2000–2024. Pre-rendered visual tiles on OEF S3.",
     source: "Hansen Global Forest Change v1.12 — UMD / Google via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/UMD_hansen_global_forest_change_2024_v1_12",
@@ -233,7 +236,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Forest loss highlights areas where canopy cover was removed — critical for landslide risk (bare slopes) and urban heat (reduced cooling). Restoration of these areas is a primary NbS intervention target. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_ghsl_population",
+    id: "ghsl_population",
     methodology: "Population count (inhabitants) per 100 m grid cell from the GHSL Population Grid (GHS-POP P2023A). Disaggregates census-based population estimates using the built-up surface layer as a proxy for where people live. UN-adjusted to match official national population totals. Pre-rendered visual tiles on OEF S3.",
     source: "GHSL GHS-POP P2023A — JRC via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_POP",
@@ -243,7 +246,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Higher spatial resolution than WorldPop (100 m vs 100 m, but different disaggregation methodology). Useful for exposure scoring and identifying densely populated cells within flood/heat hazard zones. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_viirs_nightlights",
+    id: "noaa_viirs_nightlights",
     methodology: "Annual mean nighttime radiance from the NOAA/VIIRS Day/Night Band (DNB) stray-light corrected monthly composites (VCMSLCFG product). Radiance unit: nanoWatts/cm²/steradian. Annual composite computed as the mean of available monthly composites for 2024, cloud-masked using the cloud-free coverage band (cf_cvg). Values are a proxy for electrification density, economic activity, and human presence at night. Pre-rendered visual tiles on OEF S3.",
     source: "NOAA VIIRS DNB Monthly VCMSLCFG v1 — NOAA via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG",
@@ -253,7 +256,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Night lights are a well-established proxy for informal settlement density and electricity access — both relevant to social vulnerability scoring. Anomalously dark areas within the urban core may indicate informal settlements with limited grid access. Public domain (no restrictions).",
   },
   {
-    id: "oef_emsn194",
+    id: "copernicus_emsn194",
     methodology: "Maximum inundation water depth (in metres) derived from the Copernicus Emergency Management Service Risk and Recovery Mapping activation EMSN194, activated for the May 2024 Porto Alegre / Rio Grande do Sul flood event. The water depth raster was produced by hydraulic modelling and satellite-based flood delineation over the Porto Alegre area of interest (AOI). Pre-rendered as visual tiles on OEF S3. Value encoding: terrain-RGB (R×65536 + G×256 + B) × 0.01 metres.",
     source: "Copernicus EMS Risk and Recovery Mapping — EMSN194 (May 2024 RS floods)",
     sourceUrl: "https://mapping.emergency.copernicus.eu/activations/EMSN194/",
@@ -263,7 +266,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "This layer shows the depth of inundation, not just presence/absence (unlike the Planet/SkySat flood extent layer). Depth information is critical for NbS sizing — e.g. retention basins must be designed for peak-depth volumes. Licensed under the Copernicus open data licence (free for use). Complements the Planet/SkySat 2024 flood extent layer.",
   },
   {
-    id: "oef_modis_ndvi",
+    id: "modis_ndvi",
     methodology: "Annual mean Normalized Difference Vegetation Index (NDVI) from MODIS Terra MOD13Q1 v6.1, a 16-day composite at 250 m resolution. NDVI = (NIR − Red) / (NIR + Red), where higher values (0.6–0.9) indicate dense, healthy vegetation and lower values (<0.2) indicate bare soil, impervious surfaces, or water. Annual composite computed as the mean of all available 16-day composites for 2024, cloud-masked using the quality flags. Pre-rendered visual tiles on OEF S3.",
     source: "NASA MODIS Terra MOD13Q1 v6.1 — NASA LP DAAC / USGS EROS via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD13Q1",
@@ -273,7 +276,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "NDVI is used as a proxy for canopy cover percentage in the risk analysis pipeline. Low-NDVI urban patches with high heat-risk scores are priority candidates for urban greening NbS. No restrictions on use (NASA open data).",
   },
   {
-    id: "oef_merit_hydro",
+    id: "merit_hydro_hnd",
     methodology: "Height Above Nearest Drainage (HAND) from MERIT Hydro v1.0.1, derived from the MERIT DEM (multi-error-removed improved terrain digital elevation model) at 90 m resolution. HAND measures the elevation of each pixel relative to the nearest downstream drainage channel, computed using the D8 flow routing algorithm. Low HAND values (0–5 m) indicate cells close to stream level — these are the areas most susceptible to fluvial flooding. Pre-rendered visual tiles on OEF S3.",
     source: "MERIT Hydro v1.0.1 — University of Tokyo (Yamazaki et al.) via Google Earth Engine",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
@@ -467,7 +470,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── Hydrology & Terrain ──────────────────────────────────────────────────
   {
-    id: "oef_copernicus_dem",
+    id: "copernicus_dem",
     methodology: "Copernicus DEM GLO-30 — a digital surface model (DSM) at 30 m horizontal resolution derived from the TanDEM-X radar mission. Processed by Airbus Defence & Space and released by ESA/Copernicus for global coverage. Provides the topographic baseline used in downstream flood-routing and slope-stability analyses across the Porto Alegre region. Visual tiles pre-rendered on OEF S3.",
     source: "Copernicus DEM GLO-30 — ESA / Airbus (TanDEM-X mission)",
     sourceUrl: "https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model",
@@ -477,7 +480,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "The Copernicus GLO-30 DEM is freely available under the Copernicus Data and Information Policy. It is the primary terrain input for the OEF Flood Risk Index (FRI) calculation combined with CHIRPS extreme-precipitation indices.",
   },
   {
-    id: "oef_merit_elv",
+    id: "merit_hydro_elv",
     methodology: "MERIT Hydro ELV (bare-earth elevation) is the multi-error-removed improved terrain DEM from the MERIT Hydro v1.0.1 product at 90 m resolution. Errors corrected include speckle noise, stripe artifacts, absolute bias, and tree/building height bias relative to the underlying SRTM and AW3D30 base DEMs. ELV values represent elevation in metres above EGM96 geoid. Visual tiles pre-rendered on OEF S3.",
     source: "MERIT Hydro v1.0.1 (ELV band) — University of Tokyo (Yamazaki et al.)",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
@@ -487,7 +490,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "MERIT ELV is the bare-earth counterpart to MERIT HAND; comparing the two reveals where channel incision has created natural flood buffers. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_merit_upa",
+    id: "merit_hydro_upa",
     methodology: "MERIT Hydro UPA (upstream drainage area) quantifies, for each pixel, the total area in km² of upstream catchment that drains through that cell. Derived from the D8 flow-routing algorithm applied to the MERIT DEM. Large UPA values indicate major drainage axes — these are the highest-priority corridors for fluvial NbS such as riparian buffers and retention wetlands. Visual tiles pre-rendered on OEF S3.",
     source: "MERIT Hydro v1.0.1 (UPA band) — University of Tokyo (Yamazaki et al.)",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
@@ -497,7 +500,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "UPA is closely correlated with flood magnitude: the Guaíba and Sinos rivers appear as the dominant high-UPA axes. Licensed CC BY 4.0.",
   },
   {
-    id: "oef_jrc_occurrence",
+    id: "jrc_global_surface_water_occurrence",
     methodology: "JRC Global Surface Water (GSW) — Occurrence band from the Pekel et al. (2016) dataset updated annually. Occurrence (%) gives the fraction of months (1984–2021) during which a pixel was observed as open water in Landsat 5/7/8 imagery. Values of 100% indicate permanent water; values below 50% indicate seasonal or intermittent water bodies. Visual tiles pre-rendered on OEF S3.",
     source: "JRC Global Surface Water v1.4 — EU Joint Research Centre (Pekel et al. 2016)",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
@@ -507,7 +510,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Complementary to the Seasonality and Transition bands already in the app. Occurrence highlights permanent waterbodies and is used in NbS planning to delineate protected water-retention zones. Public domain (no restrictions).",
   },
   {
-    id: "oef_jrc_seasonality",
+    id: "jrc_global_surface_water_seasonality",
     methodology: "JRC Global Surface Water (GSW) — Seasonality band. Counts the number of months in 2021 during which each pixel was classified as open water. Pixels with 12 months are permanent water; those with 1–11 months are seasonally inundated. This layer reveals floodplain wetlands that fill during the wet season (Oct–Mar) and dry out during winter — prime candidates for managed flood-retention NbS. Visual tiles pre-rendered on OEF S3.",
     source: "JRC Global Surface Water v1.4 — EU Joint Research Centre (Pekel et al. 2016)",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
@@ -517,7 +520,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Seasonality months (1–3) indicate marginal wetlands that could be restored as NbS water-retention features at relatively low cost. Public domain.",
   },
   {
-    id: "oef_hansen_treecover",
+    id: "hansen_treecover2000",
     methodology: "Hansen Global Forest Change v1.11 — Tree canopy cover for year 2000 at 30 m resolution. Derived from Landsat 7 ETM+ imagery by supervised classification trained on high-resolution reference data. Values (0–100%) represent estimated tree canopy closure for all vegetation taller than 5 m. Provides the baseline against which Hansen forest loss (already in the app) is measured. Visual tiles pre-rendered on OEF S3.",
     source: "Hansen Global Forest Change v1.11 (Treecover 2000) — University of Maryland",
     sourceUrl: "https://developers.google.com/earth-engine/datasets/catalog/UMD_hansen_global_forest_change_2023_v1_11",
@@ -528,7 +531,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── CHIRPS extreme precipitation indices ─────────────────────────────────
   {
-    id: "oef_chirps_r90p_2024",
+    id: "chirps_r90p_2024",
     methodology: "CHIRPS v2.0 (Climate Hazards Group InfraRed Precipitation with Station data) daily precipitation time series processed to compute the R90p extreme-precipitation index for 2024. R90p is the total precipitation accumulation on days that exceed the 90th percentile wet-day threshold derived from the 1981–2010 climatological baseline. Calculated at 0.05° (~5.5 km) native CHIRPS resolution and pre-rendered to visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -538,7 +541,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "R90p and related exceedance indices (R95p, R99p) directly quantify extreme-precipitation hazard. The 2024 values capture the anomalously wet conditions that drove the May 2024 catastrophic floods. OEF calculated these indices from raw CHIRPS daily grids. CHIRPS data are public domain (CC0).",
   },
   {
-    id: "oef_chirps_r90p_clim",
+    id: "chirps_r90p_climatology",
     methodology: "CHIRPS v2.0 R90p climatological baseline: annual mean of R90p computed over the 1981–2010 reference period at 0.05° resolution. Defines the normal level of extreme-precipitation accumulation against which the 2024 anomaly is measured. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -548,7 +551,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Compare with the 2024 layer to identify where extreme-precipitation hazard has intensified. Regions with large positive anomalies are highest-priority NbS intervention zones.",
   },
   {
-    id: "oef_chirps_r95p_2024",
+    id: "chirps_r95p_2024",
     methodology: "CHIRPS v2.0 R95p index for 2024: total precipitation on days exceeding the 95th percentile wet-day threshold of the 1981–2010 baseline. R95p isolates the contribution of very heavy rainfall events to annual precipitation totals. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -558,7 +561,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "R95p captures the contribution of heavy rain events above the 95th percentile — more extreme than R90p, highlighting the most severe wet episodes of 2024.",
   },
   {
-    id: "oef_chirps_r95p_clim",
+    id: "chirps_r95p_climatology",
     methodology: "CHIRPS v2.0 R95p climatological baseline (1981–2010 annual mean). Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -568,7 +571,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Baseline for R95p comparison. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_r99p_2024",
+    id: "chirps_r99p_2024",
     methodology: "CHIRPS v2.0 R99p index for 2024: total precipitation on days exceeding the 99th percentile wet-day threshold of the 1981–2010 baseline. R99p isolates rare, catastrophic rainfall events — those occurring fewer than 4 days per year on average in the baseline period. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -578,7 +581,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "The May 2024 flood rainfall is expected to appear prominently in the R99p 2024 layer. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_r99p_clim",
+    id: "chirps_r99p_climatology",
     methodology: "CHIRPS v2.0 R99p climatological baseline (1981–2010). Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -588,7 +591,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Baseline for R99p comparison. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_rx1day_2024",
+    id: "chirps_rx1day_2024",
     methodology: "CHIRPS v2.0 RX1day for 2024: the maximum 1-day precipitation total recorded across the full calendar year. This ETCCDI index captures the magnitude of the single most intense rainfall event of the year and is a key indicator for flash-flood and drainage-capacity risk. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -598,7 +601,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "RX1day identifies which sub-regions experienced the highest single-day rainfall in 2024 — directly relevant for designing NbS retention capacity. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_rx1day_clim",
+    id: "chirps_rx1day_climatology",
     methodology: "CHIRPS v2.0 RX1day climatological baseline: annual mean of the maximum 1-day rainfall over 1981–2010. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -608,7 +611,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Compare with RX1day 2024 to identify areas where single-day extremes have increased. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_rx5day_2024",
+    id: "chirps_rx5day_2024",
     methodology: "CHIRPS v2.0 RX5day for 2024: the maximum consecutive 5-day precipitation total recorded in 2024. The 5-day window captures prolonged heavy rain episodes that saturate soils and drive river flooding — the pattern responsible for the May 2024 disaster. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -618,7 +621,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "RX5day is directly comparable to design storm return periods used in urban drainage engineering. NbS design specifications should use this index as a reference storm threshold. Public domain (CC0).",
   },
   {
-    id: "oef_chirps_rx5day_clim",
+    id: "chirps_rx5day_climatology",
     methodology: "CHIRPS v2.0 RX5day climatological baseline: annual mean of the maximum 5-day rainfall over 1981–2010. Pre-rendered visual tiles on OEF S3.",
     source: "CHIRPS v2.0 — Climate Hazards Center, UC Santa Barbara",
     sourceUrl: "https://www.chc.ucsb.edu/data/chirps",
@@ -629,7 +632,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── ERA5-Land extreme temperature indices ─────────────────────────────────
   {
-    id: "oef_era5_tnx_2024",
+    id: "era5land_tnx_2024",
     methodology: "ERA5-Land hourly reanalysis (ECMWF, 9 km) processed to compute the ETCCDI extreme-temperature index TNx for 2024: the annual maximum of the daily minimum temperature (TN). Represents the intensity of the warmest night in the year. High TNx values indicate locations with persistent urban heat-island conditions that prevent nocturnal cooling — critical stress for vulnerable populations and ecosystems. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -639,7 +642,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "TNx highlights where nights are warming most intensely — key for locating urban greening and tree-cover NbS to restore nocturnal cooling. ERA5-Land is available under Copernicus licence (free for any use with attribution).",
   },
   {
-    id: "oef_era5_tnx_clim",
+    id: "era5land_tnx_climatology",
     methodology: "ERA5-Land TNx climatological baseline (1981–2010 annual mean of the maximum daily minimum temperature). Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -649,7 +652,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Baseline for TNx anomaly analysis. Copernicus open licence.",
   },
   {
-    id: "oef_era5_tx90p_2024",
+    id: "era5land_tx90p_2024",
     methodology: "ERA5-Land TX90p for 2024: the number of days in the calendar year where the daily maximum temperature (TX) exceeds the 90th percentile threshold derived from the 1981–2010 baseline. TX90p is the standard ETCCDI index for warm days and quantifies how many more hot days were experienced in 2024 relative to the climatological norm. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -659,7 +662,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Areas with high TX90p counts in 2024 have the greatest need for shade-providing NbS (urban forests, green roofs, urban parks). Copernicus open licence.",
   },
   {
-    id: "oef_era5_tx90p_clim",
+    id: "era5land_tx90p_climatology",
     methodology: "ERA5-Land TX90p climatological baseline (1981–2010 mean annual count of warm days above 90th percentile). Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -669,7 +672,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Baseline for TX90p comparison. Copernicus open licence.",
   },
   {
-    id: "oef_era5_tx99p_2024",
+    id: "era5land_tx99p_2024",
     methodology: "ERA5-Land TX99p for 2024: days exceeding the 99th percentile of daily maximum temperature — representing extreme heat events occurring fewer than 4 days/year in the 1981–2010 baseline. TX99p isolates the most dangerous heat episodes that pose acute health risks. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -679,7 +682,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "TX99p days map to periods requiring emergency cooling interventions. NbS interventions targeting TX99p hotspots address life-safety climate risks. Copernicus open licence.",
   },
   {
-    id: "oef_era5_tx99p_clim",
+    id: "era5land_tx99p_climatology",
     methodology: "ERA5-Land TX99p climatological baseline (1981–2010). Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -689,7 +692,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Baseline for TX99p comparison. Copernicus open licence.",
   },
   {
-    id: "oef_era5_txx_2024",
+    id: "era5land_txx_2024",
     methodology: "ERA5-Land TXx for 2024: the annual maximum of the daily maximum temperature. Represents the single hottest day recorded in the year — the upper bound of experienced heat stress. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -699,7 +702,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "TXx is comparable to design standards for building cooling capacity and outdoor worker safety. Copernicus open licence.",
   },
   {
-    id: "oef_era5_txx_clim",
+    id: "era5land_txx_climatology",
     methodology: "ERA5-Land TXx climatological baseline (1981–2010 annual mean of the maximum daily maximum temperature). Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) — Copernicus Climate Change Service (C3S)",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -710,7 +713,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── Heatwave Magnitude (observed) ────────────────────────────────────────
   {
-    id: "oef_hwm_2024",
+    id: "era5land_hwm_2024",
     methodology: "Heatwave Magnitude Index (HWM) for 2024 computed from ERA5-Land daily maximum temperature. HWM is defined as the magnitude of the longest heatwave in the year — calculated as the sum of daily maximum temperature anomalies above the 90th-percentile threshold over the duration of the longest consecutive heatwave event. Computed by OEF. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) via OEF heatwave-indices pipeline",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -720,7 +723,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "HWM integrates both intensity and duration of heatwaves into a single score. High-HWM areas in 2024 identify where urban greening had the highest potential to reduce acute heat mortality. OEF calculation based on Russo et al. (2015) methodology. Copernicus open licence.",
   },
   {
-    id: "oef_hwm_clim",
+    id: "era5land_hwm_climatology",
     methodology: "Heatwave Magnitude Index (HWM) climatological baseline computed from ERA5-Land over 1981–2010. Defines the historical norm of heatwave intensity for comparison with 2024 and future projections. Pre-rendered visual tiles on OEF S3.",
     source: "ERA5-Land (ECMWF) via OEF heatwave-indices pipeline",
     sourceUrl: "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
@@ -731,7 +734,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── Climate Projections — Flood Risk Index ────────────────────────────────
   {
-    id: "oef_fri_2024",
+    id: "chirps_copdem_fri_2024",
     methodology: "OEF Flood Risk Index (FRI) for 2024 — a composite index combining CHIRPS extreme-precipitation intensity (RX5day, R99p) with terrain susceptibility derived from the Copernicus DEM GLO-30 (slope, HAND). Calculated at the CHIRPS 0.05° grid then downscaled to match DEM resolution. FRI values range 0–1, with 1 indicating highest flood risk. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CHIRPS v2.0 + Copernicus DEM GLO-30",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -741,7 +744,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "FRI provides a single actionable risk score for flood-NbS prioritisation. Cells with FRI > 0.7 combined with dense population (GHSL) are the highest-priority intervention zones.",
   },
   {
-    id: "oef_fri_2030s_245",
+    id: "chirps_copdem_fri_2030s_ssp245",
     methodology: "OEF FRI projected for 2030s under SSP2-4.5 (intermediate emissions scenario). Precipitation inputs replaced with CMIP6 multi-model ensemble median projections for the 2030s period; terrain inputs unchanged (Copernicus DEM). Represents a moderate climate trajectory where warming stabilises near 2°C by 2100. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP2-4.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -751,7 +754,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "SSP2-4.5 is considered the 'middle-of-the-road' scenario consistent with current stated climate policies. NbS investments planned for a 20–30 year horizon should be sized against this scenario at minimum.",
   },
   {
-    id: "oef_fri_2030s_585",
+    id: "chirps_copdem_fri_2030s_ssp585",
     methodology: "OEF FRI projected for 2030s under SSP5-8.5 (high emissions scenario). Uses CMIP6 SSP5-8.5 ensemble median precipitation projections. Represents a high-fossil-fuel pathway leading to ~4–5°C warming by 2100. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -761,7 +764,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "SSP5-8.5 is the upper-bound scenario. Differences between SSP2-4.5 and SSP5-8.5 in the 2030s are modest; the gap widens substantially by 2050s and 2100s.",
   },
   {
-    id: "oef_fri_2050s_245",
+    id: "chirps_copdem_fri_2050s_ssp245",
     methodology: "OEF FRI projected for 2050s under SSP2-4.5. Mid-century flood risk under a moderate emissions trajectory. Captures the committed warming from historical emissions plus continued moderate growth. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP2-4.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -771,7 +774,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "The 2050s is the critical decision horizon for most NbS investments — infrastructure built today will need to function under this climate. Key input for resilience planning and financing.",
   },
   {
-    id: "oef_fri_2050s_585",
+    id: "chirps_copdem_fri_2050s_ssp585",
     methodology: "OEF FRI projected for 2050s under SSP5-8.5. Represents the high-end flood-risk scenario at mid-century. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -781,7 +784,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Comparison with SSP2-4.5 2050s reveals the mitigation benefit of ambitious climate action on flood risk.",
   },
   {
-    id: "oef_fri_2100s_245",
+    id: "chirps_copdem_fri_2100s_ssp245",
     methodology: "OEF FRI projected for end-of-century 2100s under SSP2-4.5. Long-term flood risk under a stabilised warming trajectory. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP2-4.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -791,7 +794,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "End-of-century projections carry higher uncertainty but frame the long-term risk envelope for strategic NbS planning and green-bond structuring.",
   },
   {
-    id: "oef_fri_2100s_585",
+    id: "chirps_copdem_fri_2100s_ssp585",
     methodology: "OEF FRI projected for end-of-century 2100s under SSP5-8.5 — the worst-case flood-risk scenario. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble + Copernicus DEM",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -802,7 +805,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
   // ── Climate Projections — Heatwave Magnitude ──────────────────────────────
   {
-    id: "oef_hwm_2030s_245",
+    id: "era5land_hwm_2030s_45",
     methodology: "OEF Heatwave Magnitude Index (HWM) projected for 2030s under SSP2-4.5. Computed from CMIP6 SSP2-4.5 daily maximum temperature ensemble projections using the same Russo et al. (2015) methodology as the observed HWM layers. The 90th-percentile threshold is fixed at the 1981–2010 ERA5-Land baseline. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP2-4.5 ensemble temperature projections",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -812,7 +815,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "HWM projections reveal where heatwave intensity will increase most — informing long-term urban greening and cool-corridor NbS strategies.",
   },
   {
-    id: "oef_hwm_2030s_585",
+    id: "era5land_hwm_2030s_85",
     methodology: "OEF HWM projected for 2030s under SSP5-8.5. Same methodology as SSP2-4.5 but using the high-emissions temperature scenario. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble temperature projections",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -822,7 +825,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "Near-term scenario divergence between SSP2-4.5 and SSP5-8.5 for heatwave magnitude is modest; differences widen significantly in later periods.",
   },
   {
-    id: "oef_hwm_2050s_585",
+    id: "era5land_hwm_2050s_85",
     methodology: "OEF HWM projected for 2050s under SSP5-8.5. Mid-century heatwave magnitude under the high-emissions pathway. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble temperature projections",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -832,7 +835,7 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
     notes: "By 2050s under SSP5-8.5, HWM in Porto Alegre is projected to increase substantially relative to the 2024 baseline — reinforcing the urgency of urban greening NbS deployment.",
   },
   {
-    id: "oef_hwm_2100s_585",
+    id: "era5land_hwm_2100s_85",
     methodology: "OEF HWM projected for end-of-century 2100s under SSP5-8.5 — the most extreme heat-projection scenario. Pre-rendered visual tiles on OEF S3.",
     source: "OEF calculation — CMIP6 SSP5-8.5 ensemble temperature projections",
     sourceUrl: "https://github.com/Open-Earth-Foundation/geospatial-data",
@@ -865,6 +868,136 @@ const LAYER_DATA_INFO: LayerDataInfo[] = [
   },
 ];
 
+// ── Catalog-backed fallback documentation ────────────────────────────────────
+// Datasets without a curated LAYER_DATA_INFO entry fall back to the provenance
+// recorded in the OEF geospatial-data catalog (shared/generated/catalog.json).
+const CATALOG_BY_ID = new Map((catalog.datasets as any[]).map((d) => [d.id, d]));
+
+function catalogInfo(layerId: string): LayerDataInfo | undefined {
+  const d: any = CATALOG_BY_ID.get(layerId);
+  if (!d) return undefined;
+  return {
+    id: d.id,
+    methodology: d.description ?? "See the OEF geospatial-data catalog for methodology.",
+    source: d.publisher ?? "OEF geospatial-data catalog",
+    sourceUrl: d.sourceUrl,
+    date: d.quality?.temporalCoverage ?? "—",
+    resolution: d.resolution ?? "—",
+    coverage: d.cityScope
+      ? getCity(d.cityScope).name
+      : "Global source (tile extent varies)",
+    notes:
+      [d.quality?.accuracy, d.quality?.limitations].filter(Boolean).join(" — ") ||
+      undefined,
+  };
+}
+
+// ── Coverage matrix: every catalog dataset × every city ─────────────────────
+function CoverageCell({ avail }: { avail?: { visual: boolean; values: boolean } }) {
+  if (!avail || (!avail.visual && !avail.values)) {
+    return <span className="text-zinc-600">—</span>;
+  }
+  if (avail.visual && avail.values) {
+    return (
+      <span className="text-[10px] px-1.5 py-0.5 rounded font-medium" style={{ backgroundColor: "rgba(16,185,129,0.15)", color: "#34d399" }}>
+        values
+      </span>
+    );
+  }
+  if (avail.visual) {
+    return (
+      <span className="text-[10px] px-1.5 py-0.5 rounded font-medium" style={{ backgroundColor: "rgba(59,130,246,0.15)", color: "#60a5fa" }}>
+        visual
+      </span>
+    );
+  }
+  // value tiles reachable but no visual pyramid
+  return (
+    <span className="text-[10px] px-1.5 py-0.5 rounded font-medium" style={{ backgroundColor: "rgba(245,158,11,0.15)", color: "#fbbf24" }}>
+      values only
+    </span>
+  );
+}
+
+function CoverageMatrix() {
+  const datasets = catalog.datasets as any[];
+  const generatedAt = (catalog as any).generatedAt?.slice(0, 10);
+
+  return (
+    <section className="mb-12" data-testid="section-coverage-matrix">
+      <div className="flex items-center gap-3 mb-4">
+        <span
+          className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded"
+          style={{ backgroundColor: "rgba(0,31,168,0.25)", color: "#6B8CFF" }}
+        >
+          Coverage by City
+        </span>
+        <div className="flex-1 h-px" style={{ backgroundColor: "rgba(0,31,168,0.4)" }} />
+      </div>
+
+      <p className="text-zinc-400 text-xs mb-3 max-w-3xl">
+        Every dataset in the OEF geospatial-data catalog, and whether its tile pyramids are
+        actually published per city (probed against S3{generatedAt ? ` on ${generatedAt}` : ""}
+        {", "}re-run <code className="text-zinc-300">npm run sync:catalog</code> to refresh).{" "}
+        <span style={{ color: "#34d399" }}>values</span> = visual + decodable value tiles,{" "}
+        <span style={{ color: "#60a5fa" }}>visual</span> = display tiles only, — = not published
+        for that city. Datasets with no tile assets list their access route instead.
+      </p>
+
+      <div className="flex gap-3 mb-4">
+        {CITIES.map((c) => {
+          const n = datasets.filter((d) => d.availability?.[c.id]?.visual).length;
+          return (
+            <div key={c.id} className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2">
+              <div className="text-xs font-semibold text-white">{c.name}</div>
+              <div className="text-[11px] text-zinc-400">{n} tile layers published</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-zinc-800">
+        <table className="w-full text-left text-xs">
+          <thead>
+            <tr className="bg-zinc-900 text-zinc-400 uppercase tracking-wider text-[10px]">
+              <th className="px-3 py-2 font-semibold">Dataset</th>
+              <th className="px-3 py-2 font-semibold">Type</th>
+              {CITIES.map((c) => (
+                <th key={c.id} className="px-3 py-2 font-semibold whitespace-nowrap">{c.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-zinc-800/60">
+            {datasets.map((d) => {
+              const hasTiles = !!(d.visualTiles || d.valueTiles);
+              return (
+                <tr key={d.id} className="hover:bg-zinc-900/60">
+                  <td className="px-3 py-1.5 text-zinc-200">
+                    {d.name}
+                    <span className="text-zinc-600 ml-1.5 font-mono text-[10px]">{d.id}</span>
+                  </td>
+                  <td className="px-3 py-1.5 text-zinc-500 whitespace-nowrap">{d.datasetType ?? "—"}</td>
+                  {CITIES.map((c) => (
+                    <td key={c.id} className="px-3 py-1.5 whitespace-nowrap">
+                      {hasTiles ? (
+                        <CoverageCell avail={d.availability?.[c.id]} />
+                      ) : (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500 font-medium">
+                          {d.accessType === "gee" ? "via GEE" : d.accessType === "manual_download" ? "manual" : d.accessType ?? "no tiles"}
+                        </span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 export default function DataPage() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -891,6 +1024,8 @@ export default function DataPage() {
           Documentation of all evidence layers used in the Project Preparation Data Layers tool.
           Each layer includes its data source, methodology, temporal coverage, spatial resolution, and geographic extent.
         </p>
+
+        <CoverageMatrix />
 
         {LAYER_SECTIONS.map((section) => {
           const sectionGroups = LAYER_GROUPS.filter((g) => g.section === section.id);
@@ -934,7 +1069,9 @@ export default function DataPage() {
 
                     <div className="space-y-4">
                       {groupLayers.map((layer) => {
-                        const info = LAYER_DATA_INFO.find((d) => d.id === layer.id);
+                        const info =
+                          LAYER_DATA_INFO.find((d) => d.id === layer.id) ??
+                          catalogInfo(layer.id);
                         const Icon = layer.icon;
 
                         return (

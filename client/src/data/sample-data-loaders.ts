@@ -1,3 +1,5 @@
+import { getCity } from "@shared/cities";
+
 const sampleDataCache = new Map<string, any>();
 
 async function loadFromApi(apiPath: string, cacheKey: string): Promise<any> {
@@ -26,17 +28,35 @@ async function loadSampleData(path: string): Promise<any> {
   }
 }
 
-export async function loadBoundaryData(): Promise<any> {
-  let data = await loadSampleData("/sample-data/porto-alegre-boundary.json");
+export async function loadBoundaryData(cityId: string): Promise<any> {
+  const city = getCity(cityId);
+  let data = await loadSampleData(`/sample-data/${city.boundaryFile}`);
   if (!data) {
-    data = await loadFromApi("/api/geospatial/boundary", "boundary");
+    data = await loadFromApi(`/api/geospatial/boundary?city=${city.id}`, `boundary:${city.id}`);
   }
   return data;
 }
 
-export async function loadLayerData(layerId: string): Promise<any> {
-  const samplePaths: Record<string, string> = {
-    rivers: "/sample-data/porto-alegre-rivers.json",
+// Layers whose data comes from OSM/Overpass work for any city — the API is
+// asked with ?city=. City-specific vector datasets (IBGE, GTFS, Planet) only
+// exist for Porto Alegre and keep their pre-baked sample files.
+const CITY_AWARE_API_LAYERS = new Set([
+  "rivers",
+  "sites_parks",
+  "sites_schools",
+  "sites_hospitals",
+  "sites_wetlands",
+  "sites_sports",
+  "sites_social",
+  "sites_vacant",
+  "sites_flood_zones",
+]);
+
+export async function loadLayerData(layerId: string, cityId: string): Promise<any> {
+  const city = getCity(cityId);
+  const prefix = city.id.replace(/_/g, "-");
+
+  const poaSamplePaths: Record<string, string> = {
     grid_flood: "/sample-data/porto-alegre-grid.json",
     grid_heat: "/sample-data/porto-alegre-grid.json",
     grid_landslide: "/sample-data/porto-alegre-grid.json",
@@ -45,19 +65,10 @@ export async function loadLayerData(layerId: string): Promise<any> {
     solar_potential: "/sample-data/porto-alegre-solar-neighbourhoods.json",
     ibge_census: "/sample-data/porto-alegre-ibge-indicators.json",
     ibge_settlements: "/sample-data/porto-alegre-ibge-settlements.json",
-    sites_parks:      "/sample-data/porto-alegre-sites-parks.json",
-    sites_schools:    "/sample-data/porto-alegre-sites-schools.json",
-    sites_hospitals:  "/sample-data/porto-alegre-sites-hospitals.json",
-    sites_wetlands:   "/sample-data/porto-alegre-sites-wetlands.json",
-    sites_sports:     "/sample-data/porto-alegre-sites-sports.json",
-    sites_social:     "/sample-data/porto-alegre-sites-social.json",
-    sites_vacant:       "/sample-data/porto-alegre-sites-vacant.json",
-    sites_flood_zones:  "/sample-data/porto-alegre-sites-flood_zones.json",
-    sites_flood2024:    "/sample-data/porto-alegre-flood-2024.json",
+    sites_flood2024: "/sample-data/porto-alegre-flood-2024.json",
   };
 
-  const apiPaths: Record<string, string> = {
-    rivers: "/api/geospatial/rivers",
+  const poaApiPaths: Record<string, string> = {
     grid_flood: "/api/geospatial/grid",
     grid_heat: "/api/geospatial/grid",
     grid_landslide: "/api/geospatial/grid",
@@ -66,23 +77,36 @@ export async function loadLayerData(layerId: string): Promise<any> {
     solar_potential: "/api/geospatial/solar-neighbourhoods",
     ibge_census: "/api/geospatial/ibge-indicators",
     ibge_settlements: "/api/geospatial/ibge-settlements",
-    sites_parks:     "/api/geospatial/sites/sites_parks",
-    sites_schools:   "/api/geospatial/sites/sites_schools",
-    sites_hospitals: "/api/geospatial/sites/sites_hospitals",
-    sites_wetlands:  "/api/geospatial/sites/sites_wetlands",
-    sites_sports:    "/api/geospatial/sites/sites_sports",
-    sites_social:    "/api/geospatial/sites/sites_social",
-    sites_vacant:      "/api/geospatial/sites/sites_vacant",
-    sites_flood_zones: "/api/geospatial/sites/sites_flood_zones",
   };
 
-  const samplePath = samplePaths[layerId];
+  if (CITY_AWARE_API_LAYERS.has(layerId)) {
+    // Server caches Overpass results per city as sample-data files; try the
+    // static file first (fast path), then hit the API.
+    const staticFile =
+      layerId === "rivers"
+        ? `/sample-data/${prefix}-rivers.json`
+        : `/sample-data/${prefix}-sites-${layerId.replace("sites_", "")}.json`;
+    const cached = await loadSampleData(staticFile);
+    if (cached) return cached;
+
+    const apiPath =
+      layerId === "rivers"
+        ? `/api/geospatial/rivers?city=${city.id}`
+        : `/api/geospatial/sites/${layerId}?city=${city.id}`;
+    try {
+      return await loadFromApi(apiPath, `${layerId}:${city.id}`);
+    } catch {
+      return null;
+    }
+  }
+
+  const samplePath = poaSamplePaths[layerId];
   if (samplePath) {
-    let data = await loadSampleData(samplePath);
+    const data = await loadSampleData(samplePath);
     if (data) return data;
   }
 
-  const apiPath = apiPaths[layerId];
+  const apiPath = poaApiPaths[layerId];
   if (apiPath) {
     try {
       return await loadFromApi(apiPath, layerId);

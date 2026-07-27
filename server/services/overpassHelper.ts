@@ -18,7 +18,11 @@ export async function queryOverpass(query: string, retries = MAX_RETRIES): Promi
 
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          // Overpass rejects requests without a descriptive User-Agent with 406.
+          "User-Agent": "OEF-Geo-Layer-Viewer/1.0 (https://github.com/joaquinOEF/Geo-Layer-Viewer)",
+        },
         body: `data=${encodeURIComponent(query)}`,
         signal: controller.signal,
       });

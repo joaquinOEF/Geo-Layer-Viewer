@@ -70,7 +70,12 @@ export function decodePixelNumeric(
   if (alpha < 10) return null;
 
   if (encoding.type === "categorical") {
-    return r; // class id
+    // Plain class rasters store the class id in R (G=B=0). Mechanism-type
+    // rasters store class+1 in 24-bit RGB so raw 0 can mean nodata — the
+    // catalog encoding then carries nodata: 0 and offset: -1.
+    const raw = r + 256 * g + 65536 * b;
+    if (encoding.nodata !== undefined && raw === encoding.nodata) return null;
+    return raw + (encoding.offset ?? 0);
   }
 
   const raw = r + 256 * g + 65536 * b;
@@ -88,7 +93,8 @@ export function decodePixelDisplay(
   if (alpha < 10) return null;
 
   if (encoding.type === "categorical") {
-    const classId = r;
+    const classId = decodePixelNumeric(r, g, b, alpha, encoding);
+    if (classId === null) return null;
     const className = encoding.classes?.[classId];
     return className ?? `Class ${classId}`;
   }

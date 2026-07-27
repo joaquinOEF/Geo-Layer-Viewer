@@ -1,6 +1,31 @@
 import { Link } from "wouter";
-import { Database } from "lucide-react";
+import { Database, MapPin, ChevronDown } from "lucide-react";
 import { SiGithub } from "react-icons/si";
+import { CITIES } from "@shared/cities";
+import { useCity } from "@/lib/cityContext";
+
+function CitySelector() {
+  const { city, setCityId } = useCity();
+  return (
+    <div className="relative flex items-center" data-testid="select-city-wrapper">
+      <MapPin className="w-3.5 h-3.5 text-white absolute left-2.5 pointer-events-none" />
+      <select
+        data-testid="select-city"
+        value={city.id}
+        onChange={(e) => setCityId(e.target.value)}
+        className="appearance-none pl-8 pr-7 py-1.5 rounded-lg text-xs font-medium bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer outline-none"
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
+        {CITIES.map((c) => (
+          <option key={c.id} value={c.id} className="text-zinc-900">
+            {c.name} — {c.region}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="w-3 h-3 text-white absolute right-2 pointer-events-none" />
+    </div>
+  );
+}
 
 export default function Header() {
   return (
@@ -32,6 +57,7 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-2">
+        <CitySelector />
         <Link href="/data">
           <a
             data-testid="link-data-page"
