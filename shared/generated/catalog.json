@@ -1,0 +1,2742 @@
+{
+  "source": "/Users/jvp/Claude/work/oef/geospatial-data/catalog/datasets.yaml",
+  "generatedAt": "2026-07-27T15:26:03.242Z",
+  "datasets": [
+    {
+      "id": "dynamic_world",
+      "name": "Dynamic World V1",
+      "publisher": "World Resources Institute Google",
+      "license": "CC-BY 4.0",
+      "resolution": "10m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1#description",
+      "datasetType": "land_cover",
+      "rasterType": "categorical_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2015 to present (annual composites)",
+        "accuracy": "Deep learning classification; ~10m resolution",
+        "limitations": "Annual composite, cloud-filtered; may underrepresent ephemeral land cover"
+      },
+      "description": "Versioned categorical land-use raster exposed by the test API for Porto Alegre.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/poa_dynamicworld_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "Water",
+          "1": "Trees",
+          "2": "Grass",
+          "3": "Flooded vegetation",
+          "4": "Crops",
+          "5": "Shrub",
+          "6": "Built",
+          "7": "Bare",
+          "8": "Snow"
+        },
+        "classColors": {
+          "0": "#62B0CC",
+          "1": "#488C5F",
+          "2": "#98B982",
+          "3": "#A0AAC3",
+          "4": "#D7A55F",
+          "5": "#CDB982",
+          "6": "#B45F55",
+          "7": "#AFA89E",
+          "8": "#B9CDE1"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_gtfs",
+      "name": "GTFS Porto Alegre",
+      "publisher": "EPTC (Empresa Pública de Transporte e Circulação)",
+      "license": "CC BY 4.0",
+      "resolution": "vector",
+      "sourceUrl": "https://dadosabertos.poa.br/dataset/gtfs",
+      "datasetType": "transport",
+      "rasterType": "vector",
+      "accessType": "manual_download",
+      "description": "General Transit Feed Specification (GTFS) for Porto Alegre bus transit. Includes routes, stops, shapes, and schedules.",
+      "visualTiles": null,
+      "valueTiles": null,
+      "cogUrl": null,
+      "encoding": null,
+      "cityScope": "porto_alegre",
+      "availability": {}
+    },
+    {
+      "id": "jrc_global_surface_water",
+      "name": "JRC Global Surface Water (Transition)",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
+      "datasetType": "water",
+      "rasterType": "categorical_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "1984–2021",
+        "accuracy": "Landsat-based; transition between first/last year",
+        "limitations": "Categorical change classes only"
+      },
+      "description": "JRC Global Surface Water v1.4 transition classes for Porto Alegre. Water regime change (permanent, seasonal, lost, new). Supports flood/drought adaptation planning.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/transition/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/transition/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/transition/poa_gsw_transition_30m_v1_4_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "No change",
+          "1": "Permanent water",
+          "2": "New permanent",
+          "3": "Lost permanent",
+          "4": "Seasonal water",
+          "5": "New seasonal",
+          "6": "Lost seasonal",
+          "7": "Seasonal to permanent",
+          "8": "Permanent to seasonal",
+          "9": "Ephemeral permanent",
+          "10": "Ephemeral seasonal"
+        },
+        "classColors": {
+          "0": "#FFFFFF",
+          "1": "#0000FF",
+          "2": "#22B14C",
+          "3": "#D1102D",
+          "4": "#99D9EA",
+          "5": "#B5E61D",
+          "6": "#E6A1AA",
+          "7": "#FF7F27",
+          "8": "#FFC90E",
+          "9": "#7F7F7F",
+          "10": "#C3C3C3"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "global_solar_atlas",
+      "name": "Global Solar Atlas PV Output",
+      "publisher": "World Bank Group, Solargis",
+      "license": "Free for non-commercial use",
+      "resolution": "930m",
+      "sourceUrl": "https://globalsolaratlas.info/download/brazil",
+      "datasetType": "solar",
+      "rasterType": "numeric_raster",
+      "accessType": "manual_download",
+      "quality": {
+        "temporalCoverage": "1999-2018 (LTAy)",
+        "accuracy": "±4% typical for PVOUT",
+        "limitations": "Regional screening; site-specific validation recommended for project planning"
+      },
+      "description": "PV Output (kWh/kWp/day) from Global Solar Atlas Brazil LTAy AvgDailyTotals.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_solar_atlas/release/v2/tiles_pvout/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_solar_atlas/release/v2/tiles_pvout_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_solar_atlas/release/v2/poa_PVOUT_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 0.001,
+        "offset": 0,
+        "unit": "kWh/kWp/day"
+      },
+      "cityScope": null,
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        },
+        "plymouth": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "ghsl_built_up",
+      "name": "GHSL Built-Up Settlement Grid",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "100m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_BUILT_S",
+      "datasetType": "built_up",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2025 (P2023A)",
+        "accuracy": "Built-up surface in m² per 100m grid cell",
+        "limitations": "Clamped 0–10000 m² for value tiles"
+      },
+      "description": "GHSL Built-Up P2023A built-up surface (m² per 100m cell) for Porto Alegre. Exported from GEE GHS_BUILT_S 2025, clipped and tiled for mapping.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_built_up/release/v1/2025/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_built_up/release/v1/2025/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_built_up/release/v1/2025/porto_alegre/poa_ghsl_built_up_100m_p2023a_2025_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m²"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "ghsl_degree_urbanization",
+      "name": "GHSL Degree of Urbanization (SMOD)",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "1000m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_SMOD_V2-0",
+      "datasetType": "settlement",
+      "rasterType": "categorical_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2025 (P2023A)",
+        "accuracy": "Eurostat Degree of Urbanisation methodology",
+        "limitations": "1 km grid; class from population and built-up density"
+      },
+      "description": "GHSL Degree of Urbanization (SMOD) P2023A for Porto Alegre. Rural-urban classification (water, rural, suburban, urban centre) at 1 km resolution.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_degree_urbanization/release/v2/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_degree_urbanization/release/v2/2024/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_degree_urbanization/release/v2/2024/porto_alegre/poa_ghsl_degree_urb_1000m_p2023a_2025_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "10": "Water",
+          "11": "Very low density rural",
+          "12": "Low density rural",
+          "13": "Rural cluster",
+          "21": "Suburban or peri-urban",
+          "22": "Semi-dense urban cluster",
+          "23": "Dense urban cluster",
+          "30": "Urban centre"
+        },
+        "classColors": {
+          "10": "#7AB6F5",
+          "11": "#CDF57A",
+          "12": "#ABCD66",
+          "13": "#375623",
+          "21": "#FFFF00",
+          "22": "#A87000",
+          "23": "#732600",
+          "30": "#FF0000"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "hansen_forest_change",
+      "name": "Hansen Global Forest Change (Loss)",
+      "publisher": "UMD / Google",
+      "license": "CC BY 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UMD_hansen_global_forest_change_2024_v1_12",
+      "datasetType": "forest",
+      "rasterType": "categorical_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2000–2024",
+        "accuracy": "Stand-replacement forest loss from Landsat",
+        "limitations": "Binary loss only; lossyear band gives year of loss"
+      },
+      "description": "Hansen Global Forest Change v1.12 forest loss for Porto Alegre. Binary: 0 = no loss, 1 = loss (2000–2024). Supports restoration and climate action planning.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/loss/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/loss/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/loss/poa_hansen_loss_30m_v1_12_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "No loss",
+          "1": "Forest loss"
+        },
+        "classColors": {
+          "0": "#F0F0F0",
+          "1": "#FF0000"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "ghsl_population",
+      "name": "GHSL Population Grid",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "100m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GHSL_P2023A_GHS_POP",
+      "datasetType": "population",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2025 (P2023A)",
+        "accuracy": "Inhabitants per 100m grid cell",
+        "limitations": "Clamped 0–16777215 for value tiles (24-bit rgb_packed)"
+      },
+      "description": "GHSL Population P2023A inhabitants per 100m cell for Porto Alegre. Exported from GEE GHS_POP 2025, clipped and tiled for mapping.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_population/release/v1/2025/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_population/release/v1/2025/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_population/release/v1/2025/porto_alegre/poa_ghsl_pop_100m_p2023a_2025_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "inhabitants"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "br_ibge",
+      "name": "IBGE Census Data",
+      "publisher": "IBGE (Instituto Brasileiro de Geografia e Estatística)",
+      "license": "CC BY 4.0",
+      "resolution": "vector",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "census",
+      "rasterType": "vector",
+      "accessType": "public_api",
+      "quality": {
+        "temporalCoverage": "2010 (indicators), 2022 (informal settlements)",
+        "accuracy": "Official statistics; possible undercount in informal areas",
+        "limitations": "Indicators from Census 2010; FCU boundaries from Census 2022; some FCUs not yet sectorized"
+      },
+      "description": "IBGE Census data for Porto Alegre. Includes neighbourhood-level indicators (Census 2010, SIDRA API) and informal settlement polygons (Census 2022, favelas e comunidades urbanas).",
+      "visualTiles": null,
+      "valueTiles": null,
+      "cogUrl": null,
+      "encoding": null,
+      "cityScope": null,
+      "availability": {}
+    },
+    {
+      "id": "poa_exposure",
+      "name": "Exposure Score — Population Density (POA, shared)",
+      "publisher": "IBGE (source indicators), Open Earth Foundation (grid rasterization)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "shared",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Census 2022 (Censo 2022 population by neighbourhood)",
+        "accuracy": "Min–max normalized population density (people/km²) per POA neighbourhood, burned to canonical 250 m grid",
+        "limitations": "Constant exposure score within each bairro polygon; polygon area includes parks, water bodies, and industrial zones that may underestimate residential density in some bairros. Screening proxy, not asset inventory.\n"
+      },
+      "description": "Shared neighbourhood exposure score (0–1) for Porto Alegre on a canonical 250 m grid. Derived from IBGE Censo 2022 population, computed as population density (people/km²) per bairro, min–max normalized across all POA bairros. Used as the E component in both flood and heat risk scores. Computed by `shared/compute_ev.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/exposure/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/exposure/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/exposure/exposure_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_vulnerability",
+      "name": "Vulnerability Score — Vulnerable Age Share (POA, shared)",
+      "publisher": "IBGE (source indicators), Open Earth Foundation (grid rasterization)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "shared",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Census 2022 (Censo 2022 age structure by neighbourhood)",
+        "accuracy": "Min–max normalized share of population aged 0–4 or 60+ per POA neighbourhood, burned to canonical 250 m grid",
+        "limitations": "Constant vulnerability score within each bairro polygon; age-only proxy; poverty not included (not available at bairro level in Censo 2022 aggregates)"
+      },
+      "description": "Shared neighbourhood vulnerability score (0–1) for Porto Alegre on a canonical 250 m grid. Derived from IBGE Censo 2022 age data: share of population aged 0–4 or 60+ per bairro, min–max normalized across all POA bairros. Used as the V component in both flood and heat risk scores. Computed by `shared/compute_ev.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/vulnerability/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/vulnerability/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/shared/vulnerability/vulnerability_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_ev_bairro",
+      "name": "Exposure & Vulnerability by Bairro (POA, shared)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "vector",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "shared",
+      "rasterType": "vector",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Census 2022 (Censo 2022 population and age structure by neighbourhood)",
+        "accuracy": "Min–max normalized exposure (population density) and vulnerability (age 0–4 or 60+) per bairro; n=94 inhabited bairros",
+        "limitations": "Bairro-level constant scores; age-only vulnerability proxy; polygon area includes parks and water. Shared E/V source — hazard risk products may use hazard-specific E/V columns in their own bairro vectors.\n"
+      },
+      "description": "Shared neighbourhood exposure and vulnerability attributes for Porto Alegre (IBGE Censo 2022 bairro boundaries). Vector companion to `poa_exposure` and `poa_vulnerability` rasters. Key fields: exposure_score, vulnerability_score, total_population, population_density. Computed by `shared/compute_ev.ipynb`.",
+      "visualTiles": null,
+      "valueTiles": null,
+      "cogUrl": null,
+      "encoding": null,
+      "cityScope": "porto_alegre",
+      "availability": {}
+    },
+    {
+      "id": "poa_flood_hazard",
+      "name": "Flood Hazard Score (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GLOFLOR_V2_1",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static hazard layers (JRC, Aqueduct, GFD, GFPLAIN ensemble)",
+        "accuracy": "Weighted ensemble of normalized global fluvial hazard products; partial coverage rule (>=3/4 layers + fluvial)",
+        "limitations": "Hazard screening only (no exposure/vulnerability); not event-specific May 2024 depth"
+      },
+      "description": "OEF flood hazard susceptibility index (0–1) for Porto Alegre. Ensemble of JRC GLOFLO v2.1, Global Flood Database, WRI Aqueduct, and GFPLAIN250m on a common ~250 m grid. Methodology in `models/flood_hazard/model_card.md`; defaults in `models/flood_hazard/config.yaml`; score notebook `transformation/flood_hazard/flood_hazard_score_v2.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/hazard/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/hazard/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/hazard/flood_hazard_score_idw_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_flood_risk",
+      "name": "Flood Risk Score H×E×V (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static composite from current hazard + neighborhood E/V rasterization",
+        "accuracy": "R = (H × E × V)^(1/3) on cells where all three components are finite",
+        "limitations": "Screening-level composite; E/V constant per barrio; not IPCC full risk or loss modeling"
+      },
+      "description": "OEF flood risk screening index (0–1) for Porto Alegre: geometric mean of hazard (OEF ensemble), exposure (IBGE population grid), and vulnerability (IBGE poverty + age grid). Documented in `flood_risk_score_methodology.md`. Bairro vector (`bairro_gpkg_url`): zonal mean hazard, exposure, vulnerability, and risk per bairro (n=94); fields flood_hazard_mean, flood_exposure_score, flood_vulnerability_score, flood_risk_score. Used for Step 0 screening.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/risk/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/risk/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/risk/flood_risk_score_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_flood_mechanism_type",
+      "name": "Flood Mechanism Type (POA, 250 m)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/hazard/flood_hazard_score_idw_cog.tif",
+      "datasetType": "flood",
+      "rasterType": "categorical_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static screening layer from current catalog COGs and OSM waterways",
+        "accuracy": "Per-cell dominant mechanism from rule-based NBS screening (riverine, pluvial, low-lying, drainage proxy)",
+        "limitations": "Screening-level classification only; drainage_constrained is a proxy until municipal drainage data exists; not event-specific depth"
+      },
+      "description": "OEF dominant flood mechanism type per 250 m cell for Porto Alegre (ON-5990). Integer codes: 0 none, 1 riverine, 2 pluvial, 3 low_lying, 4 drainage_constrained, 5 mixed. Rules in `transformation/nbs_screening/nbs_rules.py`; produced by `transformation/nbs_screening/nbs_site_query_flood_e2e.ipynb`. Methodology: `models/nbs_flood_mechanism_type/`. Rasterized on the OEF flood hazard 250 m grid. Value tiles use Terrain RGB with +1 offset (`mechanism_code = encoded - 1`; encoded 0 = nodata). GeoJSON (`geojson_url`) lists screened cells with mechanism strengths, boolean flags, and `is_interpolated` for analytical QA (not a map tile layer).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/flood_mechanism/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/flood_mechanism/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/floods/flood_mechanism/flood_mechanism_type_poa_250m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "offset": -1,
+        "nodata": 0,
+        "classes": {
+          "0": "None",
+          "1": "Riverine",
+          "2": "Pluvial",
+          "3": "Low-lying",
+          "4": "Drainage constrained",
+          "5": "Mixed"
+        },
+        "classColors": {
+          "0": "#e0e0e0",
+          "1": "#2166ac",
+          "2": "#fdae61",
+          "3": "#abd9e9",
+          "4": "#7b3294",
+          "5": "#8e0152"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_heat_mechanism_type",
+      "name": "Heat Mechanism Type (POA, 250 m)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/hazard/heat_hazard_score_cog.tif",
+      "datasetType": "heat",
+      "rasterType": "categorical_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static screening layer from current catalog COGs (LST, built-up, tree cover, H/E/V/R)",
+        "accuracy": "Per-cell dominant heat mechanism from rule-based NBS screening (UHI, shade deficit, daytime LST, nocturnal cooling, social exposure)",
+        "limitations": "Screening-level classification only; LST proxies are surface temperature not pedestrian comfort"
+      },
+      "description": "OEF dominant heat mechanism type per 250 m cell for Porto Alegre (ON-5991). Integer codes: 0 without_clear_dominant, 1 uhi_built_up, 2 shade_deficit, 3 high_daytime_lst, 4 limited_nocturnal_cooling, 5 high_social_exposure, 6 mixed. Rules in `transformation/nbs_screening/nbs_rules.py`; produced by `transformation/nbs_screening/nbs_site_query_heat_e2e.ipynb`. Methodology: `models/nbs_heat_mechanism_type/`. Rasterized on the OEF heat hazard 250 m grid. GeoJSON (`geojson_url`) lists screened cells with mechanism strengths, boolean flags, and `is_interpolated` for analytical QA (not a map tile layer).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/heat_mechanism/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/heat_mechanism/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/heat_mechanism/heat_mechanism_type_poa_250m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "offset": -1,
+        "nodata": 0,
+        "classes": {
+          "0": "Without clear dominant",
+          "1": "UHI built-up",
+          "2": "Shade deficit",
+          "3": "High daytime LST",
+          "4": "Limited nocturnal cooling",
+          "5": "High social exposure",
+          "6": "Mixed"
+        },
+        "classColors": {
+          "0": "#e0e0e0",
+          "1": "#d73027",
+          "2": "#fee08b",
+          "3": "#fc8d59",
+          "4": "#9970ab",
+          "5": "#636363",
+          "6": "#8e0152"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_landslide_mechanism_type",
+      "name": "Landslide Mechanism Type (POA, 90 m)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~90m",
+      "sourceUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/hazard/landslide_hazard_score_90m_cog.tif",
+      "datasetType": "landslide",
+      "rasterType": "categorical_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static screening layer from catalog COGs (slope, clay, NDVI P10, HAND, CHIRPS R90p, Dynamic World)",
+        "accuracy": "Per-cell dominant landslide mechanism from rule-based NBS screening on hazard-active pixels (H > 0)",
+        "limitations": "Screening-level classification only; not validated against CEMADEN inventory; CHIRPS at ~5 km"
+      },
+      "description": "OEF dominant landslide mechanism type per 90 m cell for Porto Alegre. Integer codes: 0 without_clear_dominant, 1 steep_activatable_slope, 2 rainfall_trigger, 3 low_cohesion_wet, 4 vegetation_deficit, 5 drainage_saturation, 6 disturbed_bare_slope, 7 upslope_convergence, 8 high_social_exposure, 9 mixed. Rules in `transformation/nbs_screening/nbs_rules.py`; produced by `transformation/nbs_screening/nbs_site_query_landslide_e2e.ipynb`. Methodology: `models/nbs_landslide_mechanism_type/`. Screened only where landslide hazard > 0. GeoJSON (`geojson_url`) lists screened cells with mechanism strengths, `mixed_tied_mechanisms`, boolean flags, and `is_interpolated` for analytical QA (not a map tile layer).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/landslide_mechanism/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/landslide_mechanism/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/landslide_mechanism/landslide_mechanism_type_poa_90m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "offset": -1,
+        "nodata": 0,
+        "classes": {
+          "0": "Without clear dominant",
+          "1": "Steep activatable slope",
+          "2": "Rainfall trigger",
+          "3": "Low cohesion wet",
+          "4": "Vegetation deficit",
+          "5": "Drainage saturation",
+          "6": "Disturbed bare slope",
+          "7": "Upslope convergence",
+          "8": "High social exposure",
+          "9": "Mixed"
+        },
+        "classColors": {
+          "0": "#e0e0e0",
+          "1": "#b2182b",
+          "2": "#2166ac",
+          "3": "#8c510a",
+          "4": "#d8b365",
+          "5": "#4393c3",
+          "6": "#a6611a",
+          "7": "#5e3c99",
+          "8": "#636363",
+          "9": "#8e0152"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "noaa_viirs_nightlights",
+      "name": "NOAA VIIRS Night Lights",
+      "publisher": "NOAA",
+      "license": "Public domain",
+      "resolution": "500m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG",
+      "datasetType": "night_lights",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2014 to present (monthly composites)",
+        "accuracy": "Stray-light corrected; avg_rad in nW/cm²/sr",
+        "limitations": "VCMSLCFG extends coverage toward poles with reduced quality; cf_cvg band indicates cloud-free coverage"
+      },
+      "description": "VIIRS Day/Night Band (DNB) average radiance for Porto Alegre. Annual mean composite from monthly stray-light corrected imagery. Proxy for human activity and electrification.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/noaa_viirs_nightlights/release/v1/2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/noaa_viirs_nightlights/release/v1/2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/noaa_viirs_nightlights/release/v1/2024/poa_nightlights_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 0.1,
+        "offset": 0,
+        "unit": "nW/cm²/sr"
+      },
+      "cityScope": null,
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        },
+        "plymouth": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "mapbiomas_power_infrastructure",
+      "name": "MapBiomas Power Infrastructure (Substations & Transmission Lines)",
+      "publisher": "MapBiomas",
+      "license": "CC BY 4.0",
+      "resolution": "vector",
+      "sourceUrl": "https://brasil.mapbiomas.org/dados-de-infraestrutura/",
+      "datasetType": "energy_infrastructure",
+      "rasterType": "vector",
+      "accessType": "manual_download",
+      "quality": {
+        "temporalCoverage": "Compiled through August 2025",
+        "accuracy": "Compiled from IBGE, ANTT, EPE, ONS, MME, ANAC and other sources",
+        "limitations": "Best available compilation; may not include all recent installations"
+      },
+      "description": "MapBiomas Brasil electrical infrastructure: substations (points) and high-voltage transmission lines (linestrings). Supports energy project siting and grid proximity analysis.",
+      "visualTiles": null,
+      "valueTiles": null,
+      "cogUrl": null,
+      "encoding": null,
+      "cityScope": null,
+      "availability": {}
+    },
+    {
+      "id": "copernicus_emsn194",
+      "name": "Copernicus EMS Max Water Depth (EMSN194)",
+      "publisher": "Copernicus Emergency Management Service (CEMS)",
+      "license": "Copernicus License (EU free for use)",
+      "resolution": "30m",
+      "sourceUrl": "https://mapping.emergency.copernicus.eu/activations/EMSN194/",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "manual_download",
+      "quality": {
+        "temporalCoverage": "May 2024 (flood event)",
+        "accuracy": "Risk and Recovery Mapping delineation products",
+        "limitations": "Single-event snapshot; Porto Alegre AOI only"
+      },
+      "description": "Max water depth (m) from Copernicus EMS Risk and Recovery Mapping activation EMSN194. Flood delineation for Porto Alegre, Rio Grande do Sul, May 2024.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_emsn194/release/v1/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_emsn194/release/v1/2024/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_emsn194/release/v1/2024/porto_alegre/maxwaterdepth_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 0.01,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "modis_ndvi",
+      "name": "MODIS NDVI (MOD13Q1)",
+      "publisher": "NASA LP DAAC / USGS EROS",
+      "license": "No restrictions on use",
+      "resolution": "250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD13Q1",
+      "datasetType": "vegetation",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2000 to present (16-day composites)",
+        "accuracy": "Atmospherically corrected; masked for clouds, water, aerosols",
+        "limitations": "250m resolution; annual mean composite for mapping"
+      },
+      "description": "Normalized Difference Vegetation Index (NDVI) from MODIS Terra MOD13Q1. Annual mean composite for Porto Alegre. Values -1 to 1 (scaled from raw 0.0001).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_ndvi/release/v1/2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_ndvi/release/v1/2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_ndvi/release/v1/2024/ndvi_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 0.001,
+        "offset": -1
+      },
+      "cityScope": null,
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        },
+        "plymouth": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "merit_hydro_hnd",
+      "name": "MERIT Hydro HAND (Height Above Nearest Drainage)",
+      "publisher": "University of Tokyo (Yamazaki et al.)",
+      "license": "CC BY 4.0",
+      "resolution": "90m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
+      "datasetType": "hydrography",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static (MERIT DEM-based)",
+        "accuracy": "Relative error in drainage area < 0.05 for 90% of GRDC gauges",
+        "limitations": "Clamped 0–16777215 for value tiles (24-bit rgb_packed)"
+      },
+      "description": "Height Above Nearest Drainage (HAND) from MERIT Hydro v1.0.1. Elevation above nearest stream in meters; used for flood mapping and drainage context.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/hnd/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/hnd/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/hnd/poa_merit_hydro_hnd_90m_v1_0_1_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "hansen_treecover2000",
+      "name": "Hansen Global Forest Change (Treecover 2000)",
+      "publisher": "UMD / Google",
+      "license": "CC BY 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UMD_hansen_global_forest_change_2024_v1_12",
+      "datasetType": "forest",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Year 2000 baseline",
+        "accuracy": "Percent tree canopy cover derived from Landsat",
+        "limitations": "Baseline layer only (not annual change)"
+      },
+      "description": "Hansen Global Forest Change v1.12 tree canopy cover baseline (year 2000). Pixel values represent percent tree cover.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/tree_cover_2000/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/tree_cover_2000/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/tree_cover_2000/poa_hansen_treecover2000_30m_v1_12_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "%"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "jrc_global_surface_water_occurrence",
+      "name": "JRC Global Surface Water (Occurrence)",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
+      "datasetType": "water",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "1984-2021",
+        "accuracy": "Landsat-based surface water occurrence",
+        "limitations": "Long-term percentage metric, not event-level flood depth"
+      },
+      "description": "JRC Global Surface Water v1.4 occurrence layer. Pixel values represent the frequency of water presence over the observation period.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/occurrence/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/occurrence/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/occurrence/poa_gsw_occurrence_30m_v1_4_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "%"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "jrc_global_surface_water_seasonality",
+      "name": "JRC Global Surface Water (Seasonality)",
+      "publisher": "JRC (Joint Research Centre)",
+      "license": "CC BY 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater",
+      "datasetType": "water",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "1984-2021",
+        "accuracy": "Landsat-based monthly water persistence proxy",
+        "limitations": "Aggregated long-term seasonality, not near-real-time conditions"
+      },
+      "description": "JRC Global Surface Water v1.4 seasonality layer. Pixel values represent the number of months with detected surface water.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/seasonality/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/seasonality/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/seasonality/poa_gsw_seasonality_30m_v1_4_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "months"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "merit_hydro_elv",
+      "name": "MERIT Hydro Elevation (ELV)",
+      "publisher": "University of Tokyo (Yamazaki et al.)",
+      "license": "CC BY 4.0",
+      "resolution": "90m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
+      "datasetType": "hydrography",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static (MERIT Hydro v1.0.1)",
+        "accuracy": "Hydrologically adjusted elevation surface",
+        "limitations": "Global DEM derivative; local artifacts may remain"
+      },
+      "description": "MERIT Hydro v1.0.1 elevation layer (ELV), derived from hydrologically corrected DEM. Suitable for terrain and drainage context analyses.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/elv/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/elv/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/elv/poa_merit_hydro_elv_90m_v1_0_1_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": -10000,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "merit_hydro_upa",
+      "name": "MERIT Hydro Upstream Area (UPA)",
+      "publisher": "University of Tokyo (Yamazaki et al.)",
+      "license": "CC BY 4.0",
+      "resolution": "90m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MERIT_Hydro_v1_0_1",
+      "datasetType": "hydrography",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static (MERIT Hydro v1.0.1)",
+        "accuracy": "Flow-accumulation based upstream area estimate",
+        "limitations": "Sensitive to DEM conditioning and river network assumptions"
+      },
+      "description": "MERIT Hydro v1.0.1 upstream area layer (UPA). Represents accumulated contributing area used in hydrologic and flood modeling.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/upa/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/upa/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/upa/poa_merit_hydro_upa_90m_v1_0_1_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "km^2"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "copernicus_dem",
+      "name": "Copernicus DEM GLO-30",
+      "publisher": "Copernicus Programme",
+      "license": "Copernicus open data license",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "elevation",
+      "rasterType": "numeric_raster",
+      "accessType": "manual_download",
+      "quality": {
+        "temporalCoverage": "Static global DEM",
+        "accuracy": "Global 30 m elevation model",
+        "limitations": "Vertical accuracy varies by terrain and region"
+      },
+      "description": "Copernicus DEM GLO-30 elevation model. Provides baseline topographic elevation for terrain and risk analyses.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/poa_dem_glo30m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "chirps_r90p_2024",
+      "name": "CHIRPS Extreme Precipitation Index R90p (2024)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R90p extreme precipitation indicator for Porto Alegre (2024), derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r90p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r90p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r90p/R90p_2024_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 49960,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_r90p_climatology",
+      "name": "CHIRPS Extreme Precipitation Index R90p (Climatology)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R90p annual climatology extreme precipitation indicator for Porto Alegre, derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r90p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r90p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r90p/R90p_climatology_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 37045,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_r95p_2024",
+      "name": "CHIRPS Extreme Precipitation Index R95p (2024)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R95p extreme precipitation indicator for Porto Alegre (2024), derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r95p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r95p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r95p/R95p_2024_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 31068,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_r95p_climatology",
+      "name": "CHIRPS Extreme Precipitation Index R95p (Climatology)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R95p annual climatology extreme precipitation indicator for Porto Alegre, derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r95p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r95p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r95p/R95p_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 21819,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_r99p_2024",
+      "name": "CHIRPS Extreme Precipitation Index R99p (2024)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R99p extreme precipitation indicator for Porto Alegre (2024), derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r99p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r99p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r99p/R99p_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 12196,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_r99p_climatology",
+      "name": "CHIRPS Extreme Precipitation Index R99p (Climatology)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "R99p annual climatology extreme precipitation indicator for Porto Alegre, derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r99p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r99p/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r99p/R99p_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 8476,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_rx1day_2024",
+      "name": "CHIRPS Extreme Precipitation Index RX1day (2024)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "RX1day extreme precipitation indicator for Porto Alegre (2024), derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx1day/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx1day/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx1day/RX1day_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 6459,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_rx1day_climatology",
+      "name": "CHIRPS Extreme Precipitation Index RX1day (Climatology)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "RX1day annual climatology extreme precipitation indicator for Porto Alegre, derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx1day/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx1day/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx1day/RX1day_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 5727,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_rx5day_2024",
+      "name": "CHIRPS Extreme Precipitation Index RX5day (2024)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "RX5day extreme precipitation indicator for Porto Alegre (2024), derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx5day/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx5day/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx5day/RX5day_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 17535,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_rx5day_climatology",
+      "name": "CHIRPS Extreme Precipitation Index RX5day (Climatology)",
+      "publisher": "UCSB/CHG (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS)",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "extreme_precipitation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from CHIRPS daily precipitation and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "RX5day annual climatology extreme precipitation indicator for Porto Alegre, derived from CHIRPS daily data. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx5day/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx5day/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx5day/RX5day_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 11014,
+        "unit": "mm"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_tnx_2024",
+      "name": "ERA5-Land Extreme Temperature Index TNx (2024)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TNx extreme temperature indicator for Porto Alegre (2024), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tnx/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tnx/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tnx/TNx_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 2566
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_tnx_climatology",
+      "name": "ERA5-Land Extreme Temperature Index TNx (Climatology)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TNx annual climatology extreme temperature indicator for Porto Alegre, derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tnx/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tnx/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tnx/TNx_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 2505
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "era5land_tx90p_2024",
+      "name": "ERA5-Land Extreme Temperature Index TX90p (2024)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TX90p extreme temperature indicator for Porto Alegre (2024), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx90p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx90p/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx90p/TX90p_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 1174
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_tx90p_climatology",
+      "name": "ERA5-Land Extreme Temperature Index TX90p (Climatology)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TX90p annual climatology extreme temperature indicator for Porto Alegre, derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx90p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx90p/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx90p/TX90p_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 977
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "era5land_tx99p_2024",
+      "name": "ERA5-Land Extreme Temperature Index TX99p (2024)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TX99p extreme temperature indicator for Porto Alegre (2024), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx99p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx99p/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx99p/TX99p_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 82
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_tx99p_climatology",
+      "name": "ERA5-Land Extreme Temperature Index TX99p (Climatology)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TX99p annual climatology extreme temperature indicator for Porto Alegre, derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx99p/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx99p/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx99p/TX99p_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 145
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "era5land_txx_2024",
+      "name": "ERA5-Land Extreme Temperature Index TXx (2024)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TXx extreme temperature indicator for Porto Alegre (2024), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/txx/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/txx/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/txx/TXx_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 3632
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_txx_climatology",
+      "name": "ERA5-Land Extreme Temperature Index TXx (Climatology)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "extreme_temperature",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived from ERA5-Land Daily Aggregates and OEF extreme-index workflow",
+        "limitations": "Derived hazard indicator; interpretation depends on methodology and baseline choices"
+      },
+      "description": "TXx annual climatology extreme temperature indicator for Porto Alegre, derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/txx/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/txx/values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/txx/TXx_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 30841
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": false,
+          "values": false
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2024",
+      "name": "Flood Risk Index (FRI 2024)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2024), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2024/FRI_2024_POT_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 6,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2030s_ssp245",
+      "name": "Flood Risk Index (FRI 2030s SSP245)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2030s (SSP245)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2030s SSP245), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp245/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp245/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp245/FRI_2030s_ssp245_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 1,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2030s_ssp585",
+      "name": "Flood Risk Index (FRI 2030s SSP585)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2030s (SSP585)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2030s SSP585), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp585/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp585/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp585/FRI_2030s_ssp585_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 13,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2050s_ssp245",
+      "name": "Flood Risk Index (FRI 2050s SSP245)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2050s (SSP245)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2050s SSP245), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp245/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp245/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp245/FRI_2050s_ssp245_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 9,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2050s_ssp585",
+      "name": "Flood Risk Index (FRI 2050s SSP585)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2050s (SSP585)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2050s SSP585), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp585/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp585/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp585/FRI_2050s_ssp585_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 0,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": false,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2100s_ssp245",
+      "name": "Flood Risk Index (FRI 2100s SSP245)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2100s (SSP245)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2100s SSP245), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp245/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp245/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp245/FRI_2100s_ssp245_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 0,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "chirps_copdem_fri_2100s_ssp585",
+      "name": "Flood Risk Index (FRI 2100s SSP585)",
+      "publisher": "UCSB/CHG + Copernicus Programme (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (CHIRPS) + Copernicus open data license",
+      "resolution": "0.05 degree (~5566m)",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "datasetType": "flood_risk_index",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2100s (SSP585)",
+        "accuracy": "Derived index combining CHIRPS precipitation signals with Copernicus DEM context",
+        "limitations": "Model-derived composite indicator; scenario assumptions and weighting affect interpretation"
+      },
+      "description": "Flood Risk Index for Porto Alegre (2100s SSP585), derived from CHIRPS and Copernicus DEM-based processing. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp585/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp585/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp585/FRI_2100s_ssp585_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 0,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_2024",
+      "name": "Heatwave Magnitude Index HWM (2024)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2024",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM heatwave indicator for Porto Alegre (2024), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2024/HWM_2024_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 600,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_climatology",
+      "name": "Heatwave Magnitude Index HWM (Climatology)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Annual climatology",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM annual climatology heatwave indicator for Porto Alegre, derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/annual_climatology/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/annual_climatology/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/annual_climatology/HWM_climatology_pot_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 685,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_2030s_45",
+      "name": "Heatwave Magnitude Index HWM (2030s SSP245)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2030s (SSP245)",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM heatwave indicator for Porto Alegre (2030s SSP245), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp245/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp245/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp245/HWM_2030s_45_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 1035,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_2030s_85",
+      "name": "Heatwave Magnitude Index HWM (2030s SSP585)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2030s (SSP585)",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM heatwave indicator for Porto Alegre (2030s SSP585), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp585/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp585/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp585/HWM_2030s_85_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 1003,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_2050s_85",
+      "name": "Heatwave Magnitude Index HWM (2050s SSP585)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2050s (SSP585)",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM heatwave indicator for Porto Alegre (2050s_85 label in processing outputs), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2050s_ssp245/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2050s_ssp245/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2050s_ssp245/HWM_2050s_85_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 1003,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5land_hwm_2100s_85",
+      "name": "Heatwave Magnitude Index HWM (2100s SSP585)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "11132m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR#description",
+      "datasetType": "heatwave",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2100s (SSP585)",
+        "accuracy": "Derived heatwave indicator from ERA5-Land and OEF processing workflow",
+        "limitations": "Model-derived indicator; interpretation depends on heatwave definition and thresholds"
+      },
+      "description": "HWM heatwave indicator for Porto Alegre (2100s SSP585), derived from ERA5-Land. Encoded as 24-bit RGB with per-layer scale/offset for value tiles.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2100s_ssp585/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2100s_ssp585/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2100s_ssp585/HWM_2100s_85_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 100,
+        "offset": 2383,
+        "unit": "index"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_heat_hazard",
+      "name": "Heat Hazard Score (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "DJF summers 2015–2024 (Landsat 8, MODIS MOD11A2)",
+        "accuracy": "Arithmetic mean of three normalized LST layers: Landsat 8 P90 anomaly, MODIS LST daytime P90, MODIS LST nighttime P90",
+        "limitations": "LST is a surface temperature proxy, not air temperature; values reflect land cover and albedo. DJF season only; cloud masking may reduce coverage in some years. ERA5-Land excluded due to coarse spatial resolution (~9 km) adding spatial artifacts at urban scale.\n"
+      },
+      "description": "OEF heat hazard susceptibility index (0–1) for Porto Alegre. Ensemble of Landsat 8 LST P90 anomaly, MODIS MOD11A2 daytime LST P90, and MODIS MOD11A2 nighttime LST P90 on a common ~250 m grid. Arithmetic mean of normalized layers. Methodology in `models/heat_hazard/model_card.md`; defaults in `models/heat_hazard/config.yaml`; score notebook `transformation/heat_hazard/heat_hazard_score.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/hazard/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/hazard/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/hazard/heat_hazard_score_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_heat_risk",
+      "name": "Heat Risk Score H×E×V (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static composite: heat hazard (2015–2024 DJF) + shared E/V (Censo 2022)",
+        "accuracy": "R = (H × E × V)^(1/3) on cells where all three components are finite",
+        "limitations": "Screening-level composite; E/V constant per bairro; not IPCC full risk or loss modeling. Heat hazard based on LST (surface), not air temperature or heat stress indices (UTCI/WBGT).\n"
+      },
+      "description": "OEF heat risk screening index (0–1) for Porto Alegre: geometric mean of heat hazard (OEF LST ensemble), exposure (shared population density score) and vulnerability (shared vulnerable age score). Documented in `heat_risk_score_methodology.md`. Bairro vector (`bairro_gpkg_url`): zonal mean hazard, exposure, vulnerability, and risk per bairro (n=94); fields heat_hazard_mean, heat_exposure_score, heat_vulnerability_score, heat_risk_score. Used for Step 0 screening.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/risk/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/risk/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/heat/risk/heat_risk_score_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "mapbiomas_energy_infrastructure",
+      "name": "MapBiomas Energy Infrastructure (Porto Alegre)",
+      "publisher": "MapBiomas",
+      "license": "CC BY 4.0",
+      "resolution": "vector",
+      "sourceUrl": "https://brasil.mapbiomas.org/dados-de-infraestrutura/",
+      "datasetType": "energy_infrastructure",
+      "rasterType": "vector",
+      "accessType": "manual_download",
+      "quality": {
+        "temporalCoverage": "Compiled through August 2025",
+        "accuracy": "Compiled from IBGE, ANTT, EPE, ONS, MME, ANAC and other sources",
+        "limitations": "Best available compilation; clipped to Porto Alegre bbox"
+      },
+      "description": "Combined MapBiomas energy infrastructure for Porto Alegre: transmission lines, substations, solar photovoltaic plants, and small hydroelectric plants. Tagged by infrastructure_type.",
+      "visualTiles": null,
+      "valueTiles": null,
+      "cogUrl": null,
+      "encoding": null,
+      "cityScope": null,
+      "availability": {}
+    },
+    {
+      "id": "poa_landslide_hazard",
+      "name": "Landslide Hazard Score (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~90m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "landslide",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static terrain layers (Copernicus GLO-30 DEM slope, MERIT Hydro HAND, SoilGrids clay); climate layer CHIRPS R90p long-run climatology; vegetation MODIS NDVI P10 DJF 2015–2024; land cover Dynamic World mode 2023.\n",
+        "accuracy": "Weighted ensemble of five normalized terrain and climate layers on a 90 m grid. Formula: H = clamp01(0.45×slope_risk + 0.20×precip_risk×slope_risk + 0.15×low_cohesion×slope_risk + 0.10×lack_of_veg×slope_risk + 0.10×hand_factor×slope_risk) ± Dynamic World land cover modifier. Slope activation gate: slope < 15° → H = 0.\n",
+        "limitations": "Susceptibility index only — not failure probability or event frequency. CHIRPS R90p at ~5 km; nearest-neighbour resampled to 90 m. Not validated against CEMADEN or INMET historical landslide inventory. Static: does not capture time-varying antecedent moisture or seasonal vegetation dynamics.\n"
+      },
+      "description": "OEF landslide susceptibility index (0–1) for Porto Alegre on a 90 m grid. Ensemble of Copernicus GLO-30 slope, CHIRPS R90p climatology, SoilGrids clay %, MODIS NDVI P10 (DJF 2015–2024), and MERIT Hydro HAND, with Dynamic World land cover modifier. Slope < 15° gates all components to zero. Methodology in `models/landslide_hazard/model_card.md`. Computed by `transformation/landslide_hazard/landslide_hazard_score.ipynb` (`export LANDSLIDES_SITE=porto_alegre`).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/hazard/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/hazard/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/hazard/landslide_hazard_score_90m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_landslide_risk",
+      "name": "Landslide Risk Score H×E×V (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~90m",
+      "sourceUrl": "https://servicodados.ibge.gov.br/api/docs",
+      "datasetType": "landslide",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static composite: landslide hazard (terrain + CHIRPS R90p climatology + MODIS DJF 2015–2024) combined with shared E/V from Censo 2022.\n",
+        "accuracy": "R = (H × E × V)^(1/3) on 90 m cells where all three components are finite. E and V are bairro-level attributes burned onto the 90 m hazard grid (resolution-agnostic rasterization — same polygon data as flood/heat, different grid).\n",
+        "limitations": "Screening-level composite; E/V constant per bairro; not IPCC full risk or casualty modeling. Non-zero risk only appears on slopes ≥ 15° within inhabited bairros. Area denominator in E includes parks, water bodies, and non-residential land.\n"
+      },
+      "description": "OEF landslide risk screening index (0–1) for Porto Alegre on a 90 m grid: geometric mean of landslide hazard (OEF terrain+climate ensemble), exposure (shared IBGE Censo 2022 population density score), and vulnerability (shared IBGE Censo 2022 vulnerable age score). E and V bairro polygons are burned at 90 m resolution for this product specifically. Documented in `landslide_risk_score_methodology.md`. Bairro vector (`bairro_gpkg_url`): zonal mean hazard, exposure, vulnerability, and risk per bairro (n=94); fields landslide_hazard_mean, landslide_exposure_score, landslide_vulnerability_score, landslide_risk_score. Used for Step 0 screening.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/risk/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/risk/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/porto_alegre/climate_hazards/landslides/risk/landslide_risk_score_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "jrc_gloflor_v2",
+      "name": "JRC Global River Flood Hazard Maps v2.1 (RP100 Depth)",
+      "publisher": "JRC (Joint Research Centre) / CEMS GLOFAS",
+      "license": "JRC open data (no restriction on use or distribution)",
+      "resolution": "90m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_CEMS_GLOFAS_FloodHazard_v2_1",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static modeled fluvial depth (RP100); GLOFAS v2.1 release",
+        "accuracy": "LISFLOOD discharges + LISFLOOD-FP inundation along global river network",
+        "limitations": "Modeled fluvial depth only; not pluvial, coastal, or sewer flooding; not event-specific"
+      },
+      "description": "JRC/CEMS GLOFAS Flood Hazard v2.1 RP100 inundation depth for Porto Alegre. Input to the OEF flood hazard ensemble (`jrc_norm` after impact-class normalization). Local exports land under `transformation/flood_hazard/sites/{city}/data/`. Processed in `transformation/jrc_global_river_flood_hazard_maps/release/v1/jrc_global_river_flood.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/rp100_depth/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/rp100_depth/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/rp100_depth/jrc_rp100_depth_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "wri_aqueduct_flood",
+      "name": "WRI Aqueduct Flood Hazard Maps v2 (River RP100 Depth)",
+      "publisher": "World Resources Institute",
+      "license": "CC BY 4.0",
+      "resolution": "~1000m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/WRI_Aqueduct_Flood_Hazard_Maps_V2",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Historical baseline (1980); return period 100 years",
+        "accuracy": "Global riverine inundation depth from WATCH model ensemble",
+        "limitations": "Coarse native resolution (~1 km); screening signal only; not event-specific May 2024 depth"
+      },
+      "description": "WRI Aqueduct Floods v2 riverine inundation depth (`inunriver`, historical, RP100) for Porto Alegre. Input to the OEF flood hazard ensemble (`aqueduct_norm` after impact-class normalization). Local exports land under `transformation/flood_hazard/sites/{city}/data/`. Processed in `transformation/wri_aqueduct/release/v1/WRI_aqueduct.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/wri_aqueduct/release/v1/porto_alegre/depth_rp100/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/wri_aqueduct/release/v1/porto_alegre/depth_rp100/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/wri_aqueduct/release/v1/porto_alegre/depth_rp100/aqueduct_depth_rp100_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "global_flood_database",
+      "name": "Global Flood Database v1 (MODIS Events)",
+      "publisher": "Cloud to Street (C2S) / Dartmouth Flood Observatory",
+      "license": "CC BY-NC 4.0",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/GLOBAL_FLOOD_DB_MODIS_EVENTS_V1",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "2000–2018 (mapped MODIS flood events)",
+        "accuracy": "Observed flood extent per event; aggregated to event-count raster",
+        "limitations": "Observed frequency within catalog, not physical flood probability; excludes permanent water before summing"
+      },
+      "description": "Global Flood Database v1 MODIS event catalog for Porto Alegre. Aggregated to `flood_event_count_no_perm_water` (robust normalized to 0–1 as `gfd_count_norm`) and binary `gfd_observed_once`. Local exports land under `transformation/flood_hazard/sites/{city}/data/`. Processed in `transformation/global_flood_database/release/v1/global_flood_database.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_flood_database/release/v1/porto_alegre/flood_event_count_no_perm_water/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_flood_database/release/v1/porto_alegre/flood_event_count_no_perm_water/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/global_flood_database/release/v1/porto_alegre/flood_event_count_no_perm_water/gfd_flood_event_count_no_perm_water_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "event count"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "gfplain250m",
+      "name": "GFPLAIN250m Global Floodplain Mask",
+      "publisher": "IAHS (International Association of Hydrological Sciences)",
+      "license": "CC BY 4.0",
+      "resolution": "250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/IAHS_GFPLAIN250_v0",
+      "datasetType": "flood",
+      "rasterType": "categorical_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static geomorphic baseline (2018 release)",
+        "accuracy": "Geomorphological floodplain delineation from terrain indices",
+        "limitations": "Binary floodplain susceptibility only; no depth, probability, or pluvial/coastal flooding"
+      },
+      "description": "GFPLAIN250m geomorphic floodplain mask for Porto Alegre. Binary structural susceptibility layer (weight 0.10) in the OEF flood hazard ensemble. Local exports land under `transformation/flood_hazard/sites/{city}/data/`. Processed in `transformation/gfplain250m/release/v1/GFPLAIN250m.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/gfplain/release/v1/porto_alegre/gfplain_250m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/gfplain/release/v1/porto_alegre/gfplain_250m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/gfplain/release/v1/porto_alegre/gfplain_250m/gfplain_250m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "Non-floodplain",
+          "1": "Floodplain"
+        },
+        "classColors": {
+          "0": "#FFFFFF",
+          "1": "#2166AC"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "soilgrids_clay",
+      "name": "SoilGrids Clay Content (0–30 cm)",
+      "publisher": "ISRIC (via OpenLandMap / GEE)",
+      "license": "CC BY 4.0",
+      "resolution": "250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02",
+      "datasetType": "soil",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "Static (SoilGrids v2 baseline)",
+        "accuracy": "Mean clay weight fraction 0–30 cm depth",
+        "limitations": "Global soil map; not site geotechnical survey; urban compaction not represented"
+      },
+      "description": "SoilGrids v2 clay weight fraction (% at 0–30 cm) for Porto Alegre from `OpenLandMap/SOL/SOL_CLAY-WFRACTION_USDA-3A1A1A_M/v02`. Pore-pressure proxy in the landslide hazard ensemble. Local exports land under `transformation/landslide_hazard/sites/{city}/data/`. Processed in `transformation/soilgrids/release/v1/clay_soilgrids.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/soilgrids/release/2006/porto_alegre/clay_pct_250m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/soilgrids/release/2006/porto_alegre/clay_pct_250m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/soilgrids/release/2006/porto_alegre/clay_pct_250m/poa_clay_pct_250m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "%"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "landsat8_lst_djf",
+      "name": "Landsat 8 LST P90 DJF Composite (POA)",
+      "publisher": "USGS / NASA (source), Open Earth Foundation (derived processing)",
+      "license": "Public domain (Landsat)",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "DJF summers 2015–2024 (10 seasons)",
+        "accuracy": "P90 of cloud-masked ST_B10 surface temperature; min-max normalized to 0–1 for ensemble",
+        "limitations": "Surface temperature (LST), not air temperature; cloud gaps may reduce coverage"
+      },
+      "description": "Landsat 8 Collection 2 Tier 1 LST P90 composite for Porto Alegre DJF 2015–2024. Primary high-resolution layer in the OEF heat hazard ensemble. Local exports land under `transformation/heat_hazard/sites/{city}/data/`. Processed in `transformation/landsat_lst/release/v1/lst_landsat8.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/landsat8/release/v1/porto_alegre/lst_p90/djf_2015_2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/landsat8/release/v1/porto_alegre/lst_p90/djf_2015_2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/landsat8/release/v1/porto_alegre/lst_p90/djf_2015_2024/lst_lc08_p90_djf_2015_2024_poa_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "modis_mod11a2_lst_djf",
+      "name": "MODIS MOD11A2 LST P90 DJF Composite (POA)",
+      "publisher": "NASA LP DAAC (source), Open Earth Foundation (derived processing)",
+      "license": "No restrictions on use",
+      "resolution": "1000m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD11A2",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "DJF summers 2015–2024 (10 seasons)",
+        "accuracy": "P90 of quality-masked daytime and nighttime LST; min-max normalized to 0–1",
+        "limitations": "1 km resolution; LST is surface temperature proxy, not air temperature or heat stress index"
+      },
+      "description": "MODIS Terra MOD11A2 daytime and nighttime LST P90 composites for Porto Alegre DJF 2015–2024. Two independent layers in the OEF heat hazard ensemble. Local exports land under `transformation/heat_hazard/sites/{city}/data/`. Processed in `transformation/modis_lst/release/v1/MOD11A2.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_11a2/release/v1/porto_alegre/lst_day_p90/djf_2015_2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_11a2/release/v1/porto_alegre/lst_day_p90/djf_2015_2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_11a2/release/v1/porto_alegre/lst_day_p90/djf_2015_2024/mod11a2_lst_day_p90_djf_2015_2024_poa_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "era5_land_heatwave_freq_djf",
+      "name": "ERA5-Land Heat-Wave Day Frequency DJF (POA)",
+      "publisher": "ECMWF/Copernicus (source), Open Earth Foundation (derived processing)",
+      "license": "Copernicus C3S/CAMS License",
+      "resolution": "~9000m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "DJF seasons 2015–2024",
+        "accuracy": "Mean annual count of days exceeding local DJF P90 T_max threshold per grid cell",
+        "limitations": "~9 km native resolution — excluded from operational heat hazard ensemble due to spatial artefacts at urban scale; retained for regional screening context only\n"
+      },
+      "description": "ERA5-Land 2 m air temperature heat-wave frequency for Porto Alegre DJF 2015–2024. Derived from Copernicus CDS hourly `t2m` (`reanalysis-era5-land`). Local exports land under `transformation/heat_hazard/sites/{city}/data/`. Processed in `transformation/era_land/release/v1/era5_land.ipynb`. Optional in the heat hazard ensemble (`hazard.include_era5` in city site config).",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/era5_land/release/v1/porto_alegre/hw_freq/djf_2015_2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/era5_land/release/v1/porto_alegre/hw_freq/djf_2015_2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/era5_land/release/v1/porto_alegre/hw_freq/djf_2015_2024/era5_hw_freq_djf_2015_2024_poa_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "days/season"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_slope",
+      "name": "Terrain Slope from Copernicus DEM (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "Copernicus open data license",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "elevation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static (derived from Copernicus GLO-30 DEM)",
+        "accuracy": "Slope in degrees from GEE ee.Terrain.slope(); averaged to 90 m for landslide scoring",
+        "limitations": "DEM derivative; local artifacts possible; slope alone does not indicate stability"
+      },
+      "description": "Slope in degrees for Porto Alegre derived from Copernicus GLO-30 DEM. Primary activation gate (slope ≥ 15°) in the landslide hazard ensemble. Local exports land under `transformation/landslide_hazard/sites/{city}/data/`. Processed in `transformation/copernicus_dem/release/v1/slope_from_dem.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/slope_deg_30m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/slope_deg_30m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/slope_deg_30m/poa_slope_deg_30m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "degrees"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_relative_elevation",
+      "name": "Relative Elevation / Low-Lying Index (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "Copernicus open data license",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "elevation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static (derived from Copernicus GLO-30 DEM)",
+        "accuracy": "Min-max normalized elevation within POA AOI (1 = lowest relative elevation)",
+        "limitations": "Screening proxy for low-lying accumulation; not hydraulic modeling or flood depth"
+      },
+      "description": "Relative low-lying index (0–1) for Porto Alegre derived from Copernicus GLO-30 DEM. Diagnostic layer for flood NBS site screening (rain gardens, wetlands, floodable parks). Local exports land under `transformation/flood_hazard/sites/{city}/data/output/`. Processed in `transformation/copernicus_dem/release/v1/relative_elevation_depression_from_dem.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/relative_elevation_30m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/relative_elevation_30m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/relative_elevation_30m/poa_relative_elevation_30m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_depression_mask",
+      "name": "Topographic Depression Sink Mask (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "Copernicus open data license",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "elevation",
+      "rasterType": "categorical_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static (derived from Copernicus GLO-30 DEM)",
+        "accuracy": "D8 local depression mask (sink with no outlet) from priority-flood fill",
+        "limitations": "Topographic sink only; does not account for drainage infrastructure or soil infiltration"
+      },
+      "description": "Binary topographic depression mask for Porto Alegre derived from Copernicus GLO-30 DEM using D8 flow routing and priority-flood fill. Diagnostic for flood NBS screening. Local exports land under `transformation/flood_hazard/sites/{city}/data/output/`. Processed in `transformation/copernicus_dem/release/v1/relative_elevation_depression_from_dem.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_mask_30m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_mask_30m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_mask_30m/poa_depression_mask_30m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "Not a depression",
+          "1": "Depression sink"
+        },
+        "classColors": {
+          "0": "#FFFFFF",
+          "1": "#2166AC"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "poa_depression_depth",
+      "name": "Topographic Depression Depth (POA)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "Copernicus open data license",
+      "resolution": "30m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_DEM_GLO30",
+      "datasetType": "elevation",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static (derived from Copernicus GLO-30 DEM)",
+        "accuracy": "Depression depth (m) = filled DEM elevation minus original DEM elevation",
+        "limitations": "Hydrologically naive fill; urban drainage networks not represented"
+      },
+      "description": "Depression depth in meters for Porto Alegre derived from Copernicus GLO-30 DEM (filled surface minus original elevation). Diagnostic for flood NBS screening. Local exports land under `transformation/flood_hazard/sites/{city}/data/output/`. Processed in `transformation/copernicus_dem/release/v1/relative_elevation_depression_from_dem.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_depth_30m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_depth_30m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/depression_depth_30m/poa_depression_depth_30m_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 1,
+        "offset": 0,
+        "unit": "m"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "dynamic_world_mode_250m",
+      "name": "Dynamic World Mode 2023 (250 m, POA)",
+      "publisher": "Google / WRI (source), Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1",
+      "datasetType": "land_cover",
+      "rasterType": "categorical_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "2023 mode composite",
+        "accuracy": "Majority class per 250 m cell from Dynamic World 10 m",
+        "limitations": "2023 vintage; built/bare modifier in landslide hazard only"
+      },
+      "description": "Dynamic World 2023 mode land-cover class resampled to 250 m for Porto Alegre. Built/bare land-cover modifier in the landslide hazard ensemble. Local exports land under `transformation/landslide_hazard/sites/{city}/data/`. Processed in `transformation/dynamic_world/release/v1/dynamic_world_landslide.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/dw_mode_250m/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/dw_mode_250m/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/dw_mode_250m/poa_dw_mode_250m_cog.tif",
+      "encoding": {
+        "type": "categorical",
+        "classes": {
+          "0": "Water",
+          "1": "Trees",
+          "2": "Grass",
+          "3": "Flooded vegetation",
+          "4": "Crops",
+          "5": "Shrub and scrub",
+          "6": "Built",
+          "7": "Bare",
+          "8": "Snow and ice"
+        },
+        "classColors": {
+          "0": "#419BDF",
+          "1": "#397D49",
+          "2": "#88B053",
+          "3": "#7A87C6",
+          "4": "#E49635",
+          "5": "#DFC35A",
+          "6": "#C4281B",
+          "7": "#A59B8F",
+          "8": "#B39FE1"
+        }
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "modis_ndvi_p10_djf",
+      "name": "MODIS NDVI P10 DJF Climatology (POA)",
+      "publisher": "NASA LP DAAC / USGS EROS (source), Open Earth Foundation (derived processing)",
+      "license": "No restrictions on use",
+      "resolution": "250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD13Q1",
+      "datasetType": "vegetation",
+      "rasterType": "numeric_raster",
+      "accessType": "gee",
+      "quality": {
+        "temporalCoverage": "DJF summers 2015–2024",
+        "accuracy": "P10 of MODIS Terra MOD13Q1 16-day NDVI composites, scaled to -1 to 1",
+        "limitations": "250 m resolution; P10 captures low vegetation condition, not annual mean greenness"
+      },
+      "description": "MODIS MOD13Q1 NDVI P10 climatology for Porto Alegre DJF 2015–2024. P10 represents low vegetation cover conditions used as a root-cohesion protection proxy in the landslide hazard workflow. Local exports land under `transformation/landslide_hazard/sites/{city}/data/`. Processed in `transformation/modis_ndvi/release/v1/ndvi_modis_landslide.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis/release/v1/porto_alegre/MOD13Q1_061/ndvi_p10/djf_2015_2024/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis/release/v1/porto_alegre/MOD13Q1_061/ndvi_p10/djf_2015_2024/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/modis/release/v1/porto_alegre/MOD13Q1_061/ndvi_p10/djf_2015_2024/poa_ndvi_p10_djf_2015_2024_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": -1,
+        "unit": "NDVI"
+      },
+      "cityScope": "porto_alegre",
+      "availability": {
+        "porto_alegre": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "plymouth_flood_hazard",
+      "name": "Flood Hazard Score (Plymouth)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/JRC_GLOFLOR_V2_1",
+      "datasetType": "flood",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "Static hazard layers (JRC, Aqueduct, GFD, GFPLAIN ensemble)",
+        "accuracy": "Weighted ensemble of normalized global fluvial hazard products; partial coverage rule (>=3/4 layers + fluvial); IDW gap-fill",
+        "limitations": "Hazard screening only (no exposure/vulnerability); not event-specific observed depth"
+      },
+      "description": "OEF flood hazard susceptibility index (0–1) for Plymouth. Ensemble of JRC GLOFLO v2.1, Global Flood Database, WRI Aqueduct, and GFPLAIN250m on a common ~250 m grid (IDW distance-capped fill). Methodology in `models/flood_hazard/model_card.md`; defaults in `models/flood_hazard/config.yaml`; score notebook `transformation/flood_hazard/flood_hazard_score_v2.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/floods/hazard/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/floods/hazard/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/floods/hazard/flood_hazard_score_idw_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "plymouth",
+      "availability": {
+        "plymouth": {
+          "visual": true,
+          "values": true
+        }
+      }
+    },
+    {
+      "id": "plymouth_heat_hazard",
+      "name": "Heat Hazard Score (Plymouth)",
+      "publisher": "Open Earth Foundation (derived processing)",
+      "license": "CC BY 4.0",
+      "resolution": "~250m",
+      "sourceUrl": "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2",
+      "datasetType": "heat",
+      "rasterType": "numeric_raster",
+      "accessType": "internal_storage",
+      "quality": {
+        "temporalCoverage": "JJA 2015–2024 (Landsat 8, MODIS MOD11A2)",
+        "accuracy": "Arithmetic mean of normalized LST layers: Landsat 8 P90, MODIS LST daytime P90, MODIS LST nighttime P90 (ERA5 optional per site config)",
+        "limitations": "LST is a surface temperature proxy, not air temperature; values reflect land cover and albedo. Season-specific composite; cloud masking may reduce coverage in some years."
+      },
+      "description": "OEF heat hazard susceptibility index (0–1) for Plymouth. Ensemble of Landsat 8 LST P90, MODIS MOD11A2 daytime LST P90, and MODIS MOD11A2 nighttime LST P90 on a common ~250 m grid. Arithmetic mean of normalized layers. Methodology in `models/heat_hazard/model_card.md`; defaults in `models/heat_hazard/config.yaml`; score notebook `transformation/heat_hazard/heat_hazard_score.ipynb`.",
+      "visualTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/heat/hazard/tiles_visual/{z}/{x}/{y}.png",
+      "valueTiles": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/heat/hazard/tiles_values/{z}/{x}/{y}.png",
+      "cogUrl": "https://geo-test-api.s3.us-east-1.amazonaws.com/oef_calculation/release/v1/plymouth/climate_hazards/heat/hazard/heat_hazard_score_cog.tif",
+      "encoding": {
+        "type": "numeric",
+        "scale": 10000,
+        "offset": 0,
+        "unit": "score"
+      },
+      "cityScope": "plymouth",
+      "availability": {
+        "plymouth": {
+          "visual": true,
+          "values": true
+        }
+      }
+    }
+  ]
+}

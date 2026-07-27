@@ -71,9 +71,12 @@ const LEGEND_DEF: Record<string, LegendDef> = {
   sites_flood_zones: { kind: "solid" },
   sites_flood2024:   { kind: "solid" },
 
-  // ── OEF tile — Land Use & Urban ─────────────────────────────────────────────
+  // ── OEF tile layers (curated; ids = catalog dataset_ids) ─────────────────────
+  // Any tile layer NOT listed here gets an automatic legend: categorical class
+  // colours straight from the catalog encoding, or the OEF hazard gradient for
+  // numeric rasters (see autoLegend below).
   // Dynamic World: categorical colours confirmed by sampling zoom-10 tiles.
-  oef_dynamic_world: {
+  dynamic_world: {
     kind: "categorical",
     items: [
       { color: "#62b0cc", label: "Water"        },   // #62b0cc sampled
@@ -85,9 +88,9 @@ const LEGEND_DEF: Record<string, LegendDef> = {
     ],
   },
   // GHSL built-up: OEF custom gradient (orange=sparse, navy=dense)
-  oef_ghsl_built_up:      { kind: "gradient", colors: OEF_HAZARD, labels: ["0%", "100% built-up"] },
+  ghsl_built_up:      { kind: "gradient", colors: OEF_HAZARD, labels: ["0%", "100% built-up"] },
   // GHSL urbanisation: 3-class categorical per Degree of Urbanisation spec
-  oef_ghsl_urbanization: {
+  ghsl_degree_urbanization: {
     kind: "categorical",
     items: [
       { color: "#ffdc54", label: "Peri-urban"   },
@@ -95,33 +98,18 @@ const LEGEND_DEF: Record<string, LegendDef> = {
       { color: "#08306b", label: "Urban centre" },
     ],
   },
-  oef_viirs_nightlights:  { kind: "gradient", colors: OEF_HAZARD, labels: ["Dark", "Bright (radiance)"] },
-  oef_opportunity_zones:  { kind: "solid" },
-
-  // ── OEF tile — Environment & Ecology ────────────────────────────────────────
-  oef_solar_tiles:        { kind: "gradient", colors: ["#fef3c7","#fde68a","#fbbf24","#f59e0b","#b45309"], labels: ["4.0", "4.1 kWh/kWp/d"] },
-  oef_modis_ndvi:         { kind: "gradient", colors: ["#7f3b08","#e0ad68","#f7f7f7","#a8ddb5","#084081"], labels: ["-0.2", "1.0 NDVI"] },
-  oef_hansen_forest:      { kind: "gradient", colors: ["#ffffcc","#c7e9b4","#7fcdbb","#2c7fb8","#253494"], labels: ["2001", "2023 loss year"] },
-  oef_canopy_cover:       { kind: "gradient", colors: ["#f7fcf5","#c7e9c0","#74c476","#238b45","#00441b"], labels: ["0%", "100% canopy"] },
-  oef_heat_hazard:        oef("Low", "High heat hazard"),
-  oef_cooling:            { kind: "gradient", colors: ["#f7fcf5","#c7e9c0","#74c476","#238b45","#00441b"], labels: ["Low", "High cooling"] },
-  oef_composite_risk:     oef("Low risk", "High risk"),
-
-  // ── OEF tile — Population ────────────────────────────────────────────────────
-  oef_ghsl_population:    { kind: "gradient", colors: ["#f7f0fa","#d4b9da","#c994c7","#df65b0","#67001f"], labels: ["0", "17 975 /km²"] },
-  oef_exposure:           oef("Low exposure", "High exposure"),
-
-  // ── OEF tile — Hydrology & Terrain ──────────────────────────────────────────
-  oef_copernicus_dem:     { kind: "gradient", colors: ["#023858","#045a8d","#74add1","#fed976","#a63603"], labels: ["0", "284 m elevation"] },
-  oef_merit_elv:          { kind: "gradient", colors: ["#023858","#045a8d","#74add1","#fed976","#a63603"], labels: ["0", "284 m elevation"] },
-  oef_merit_upa:          { kind: "gradient", colors: ["#f0f9e8","#a8ddb5","#43a2ca","#0868ac","#022a6b"], labels: ["Small", "Large (km²)"] },
-  oef_merit_hydro:        { kind: "gradient", colors: ["#0c2340","#1e6091","#48cae4","#caf0f8","#ffffff"], labels: ["0", "30+ m above drain"] },
-  oef_slope:              { kind: "gradient", colors: ["#f7fbff","#c6dbef","#6baed6","#2171b5","#08306b"], labels: ["0°", "45°+ slope"] },
-  oef_flow_accumulation:  { kind: "gradient", colors: ["#f0f9e8","#bae4bc","#7bccc4","#2b8cbe","#084081"], labels: ["Low", "High flow accum."] },
-  oef_flood_hazard:       oef("Low", "High flood hazard"),
-  oef_jrc_occurrence:     { kind: "gradient", colors: ["#f0f9e8","#bae4bc","#7bccc4","#2b8cbe","#023858"], labels: ["0%", "100% occurrence"] },
-  oef_jrc_seasonality:    { kind: "gradient", colors: ["#f0f9e8","#a8ddb5","#43a2ca","#0868ac","#023858"], labels: ["0", "12 months/yr"] },
-  oef_jrc_surface_water: {
+  noaa_viirs_nightlights: { kind: "gradient", colors: OEF_HAZARD, labels: ["Dark", "Bright (radiance)"] },
+  global_solar_atlas:     { kind: "gradient", colors: ["#fef3c7","#fde68a","#fbbf24","#f59e0b","#b45309"], labels: ["4.0", "4.1 kWh/kWp/d"] },
+  modis_ndvi:             { kind: "gradient", colors: ["#7f3b08","#e0ad68","#f7f7f7","#a8ddb5","#084081"], labels: ["-0.2", "1.0 NDVI"] },
+  hansen_forest_change:   { kind: "gradient", colors: ["#ffffcc","#c7e9b4","#7fcdbb","#2c7fb8","#253494"], labels: ["2001", "2023 loss year"] },
+  ghsl_population:        { kind: "gradient", colors: ["#f7f0fa","#d4b9da","#c994c7","#df65b0","#67001f"], labels: ["0", "17 975 /km²"] },
+  copernicus_dem:         { kind: "gradient", colors: ["#023858","#045a8d","#74add1","#fed976","#a63603"], labels: ["0", "284 m elevation"] },
+  merit_hydro_elv:        { kind: "gradient", colors: ["#023858","#045a8d","#74add1","#fed976","#a63603"], labels: ["0", "284 m elevation"] },
+  merit_hydro_upa:        { kind: "gradient", colors: ["#f0f9e8","#a8ddb5","#43a2ca","#0868ac","#022a6b"], labels: ["Small", "Large (km²)"] },
+  merit_hydro_hnd:        { kind: "gradient", colors: ["#0c2340","#1e6091","#48cae4","#caf0f8","#ffffff"], labels: ["0", "30+ m above drain"] },
+  jrc_global_surface_water_occurrence:  { kind: "gradient", colors: ["#f0f9e8","#bae4bc","#7bccc4","#2b8cbe","#023858"], labels: ["0%", "100% occurrence"] },
+  jrc_global_surface_water_seasonality: { kind: "gradient", colors: ["#f0f9e8","#a8ddb5","#43a2ca","#0868ac","#023858"], labels: ["0", "12 months/yr"] },
+  jrc_global_surface_water: {
     kind: "categorical",
     items: [
       { color: "#023858", label: "Permanent water" },
@@ -130,55 +118,8 @@ const LEGEND_DEF: Record<string, LegendDef> = {
       { color: "#fc8d59", label: "Lost water"      },
     ],
   },
-  oef_hansen_treecover:   { kind: "gradient", colors: ["#f7fcf5","#c7e9c0","#74c476","#238b45","#00441b"], labels: ["0%", "100% canopy"] },
-  oef_emsn194:            { kind: "gradient", colors: ["#eff8ff","#9ecae1","#3182bd","#08519c","#08306b"], labels: ["0", ">2.0 m depth"] },
-
-  // ── OEF tile — CHIRPS extreme precipitation ──────────────────────────────────
-  // Colormap confirmed from pixel sampling (avgDist 6.0 vs 47+ for stdlib maps).
-  // Orange (low mm) → Navy (high mm). #b40000 = OEF nodata sentinel (excluded).
-  oef_chirps_r90p_2024:   oef("Low R90p", "High R90p (mm)"),
-  oef_chirps_r90p_clim:   oef("Low R90p", "High R90p (mm)"),
-  oef_chirps_r95p_2024:   oef("Low R95p", "High R95p (mm)"),
-  oef_chirps_r95p_clim:   oef("Low R95p", "High R95p (mm)"),
-  oef_chirps_r99p_2024:   oef("Low R99p", "High R99p (mm)"),
-  oef_chirps_r99p_clim:   oef("Low R99p", "High R99p (mm)"),
-  oef_chirps_rx1day_2024: oef("Low Rx1day", "High Rx1day (mm)"),
-  oef_chirps_rx1day_clim: oef("Low Rx1day", "High Rx1day (mm)"),
-  oef_chirps_rx5day_2024: oef("Low Rx5day", "High Rx5day (mm)"),
-  oef_chirps_rx5day_clim: oef("Low Rx5day", "High Rx5day (mm)"),
-
-  // ── OEF tile — ERA5-Land extreme temperature ─────────────────────────────────
-  // Same OEF custom colormap — confirmed from pixel sampling ERA5 tiles.
-  // Orange = cooler/less extreme; Navy = hotter/more extreme.
-  oef_era5_tnx_2024:   oef("Low TNx (°C)", "High TNx (°C)"),
-  oef_era5_tnx_clim:   oef("Low TNx (°C)", "High TNx (°C)"),
-  oef_era5_tx90p_2024: oef("Low TX90p (%)", "High TX90p (%)"),
-  oef_era5_tx90p_clim: oef("Low TX90p (%)", "High TX90p (%)"),
-  oef_era5_tx99p_2024: oef("Low TX99p (%)", "High TX99p (%)"),
-  oef_era5_tx99p_clim: oef("Low TX99p (%)", "High TX99p (%)"),
-  oef_era5_txx_2024:   oef("Low TXx (°C)",  "High TXx (°C)"),
-  oef_era5_txx_clim:   oef("Low TXx (°C)",  "High TXx (°C)"),
-
-  // ── OEF tile — Heatwave Magnitude (observed + projections) ──────────────────
-  // Same OEF scale. Porto Alegre 2024 tile = 100 % dark navy (#08306b) →
-  // the city sits at the extreme high end of the HWM scale.
-  oef_hwm_2024:      oef("Low HWM", "High HWM (°C·days)"),
-  oef_hwm_clim:      oef("Low HWM", "High HWM (°C·days)"),
-  oef_hwm_2030s_245: oef("Low HWM", "High SSP2-4.5"),
-  oef_hwm_2030s_585: oef("Low HWM", "High SSP5-8.5"),
-  oef_hwm_2050s_585: oef("Low HWM", "High SSP5-8.5"),
-  oef_hwm_2100s_585: oef("Low HWM", "High SSP5-8.5"),
-
-  // ── OEF tile — Flood Risk Index (observed + projections) ─────────────────────
-  // FRI also uses the OEF custom scale. Porto Alegre only shows the blue-cyan
-  // portion (medium-to-high risk) since the city has no low-risk zones.
-  oef_fri_2024:      oef("Low risk", "High risk (0→1)"),
-  oef_fri_2030s_245: oef("Low risk", "High SSP2-4.5"),
-  oef_fri_2030s_585: oef("Low risk", "High SSP5-8.5"),
-  oef_fri_2050s_245: oef("Low risk", "High SSP2-4.5"),
-  oef_fri_2050s_585: oef("Low risk", "High SSP5-8.5"),
-  oef_fri_2100s_245: oef("Low risk", "High SSP2-4.5"),
-  oef_fri_2100s_585: oef("Low risk", "High SSP5-8.5"),
+  hansen_treecover2000:   { kind: "gradient", colors: ["#f7fcf5","#c7e9c0","#74c476","#238b45","#00441b"], labels: ["0%", "100% canopy"] },
+  copernicus_emsn194:     { kind: "gradient", colors: ["#eff8ff","#9ecae1","#3182bd","#08519c","#08306b"], labels: ["0", ">2.0 m depth"] },
 
   // ── VIIRS I5 brightness temperature ──────────────────────────────────────────
   ref_viirs_lst: { kind: "gradient", colors: ["#313695","#74add1","#ffffbf","#f46d43","#a50026"], labels: ["25°C", "45°C surface"] },
@@ -228,8 +169,29 @@ function CategoricalItems({ items }: { items: { color: string; label: string }[]
   );
 }
 
+// Automatic legend for catalog tile layers with no curated LEGEND_DEF entry:
+// categorical rasters get their class colours straight from the catalog
+// encoding; numeric rasters default to the OEF hazard gradient (all OEF-
+// pipeline tiles share that colormap).
+function autoLegend(layer: LayerState): LegendDef {
+  const enc = layer.valueEncoding;
+  if (enc?.type === "categorical" && enc.classes) {
+    return {
+      kind: "categorical",
+      items: Object.entries(enc.classes).map(([code, label]) => ({
+        color: enc.classColors?.[Number(code)] ?? layer.color,
+        label: String(label),
+      })),
+    };
+  }
+  if (layer.source === "tiles") {
+    return { kind: "gradient", colors: OEF_HAZARD, labels: ["Low", "High"] };
+  }
+  return { kind: "solid" };
+}
+
 function LayerRow({ layer }: { layer: LayerState }) {
-  const def: LegendDef = LEGEND_DEF[layer.id] ?? { kind: "solid" };
+  const def: LegendDef = LEGEND_DEF[layer.id] ?? autoLegend(layer);
   const { color } = layer;
   const hasValues = layer.hasValueTiles === true;
   const unit = layer.valueEncoding?.unit;

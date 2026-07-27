@@ -35,112 +35,31 @@ import {
 } from "./services/spatialAnalysisService";
 import fs from "fs";
 import path from "path";
+import { DEFAULT_CITY_ID, getCity, type CityDef } from "@shared/cities";
+import catalogJson from "@shared/generated/catalog.json";
 
 interface TileLayerConfig {
   urlTemplate: string;
   maxNativeZoom?: number;
 }
 
+// ── Catalog-driven tile layers ───────────────────────────────────────────────
+// One proxy route per catalog dataset with reachable visual tiles. The catalog
+// (shared/generated/catalog.json) is regenerated from the OEF geospatial-data
+// repo with `npm run sync:catalog` — do NOT hand-add S3 layers here.
+const CATALOG_TILE_LAYERS: Record<string, TileLayerConfig> = Object.fromEntries(
+  catalogJson.datasets
+    .filter(
+      (d: any) =>
+        d.visualTiles &&
+        Object.values(d.availability ?? {}).some((a: any) => a.visual)
+    )
+    .map((d: any) => [d.id, { urlTemplate: d.visualTiles }])
+);
+
+// Non-catalog reference layers (external WMTS services) stay hand-registered.
 const OEF_TILE_LAYERS: Record<string, TileLayerConfig> = {
-  // ── OEF geospatial-data catalog tile layers ────────────────────────────────
-  dynamic_world: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/dynamic_world/release/v1/2023/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  solar_pvout: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/global_solar_atlas/release/v2/tiles_pvout/{z}/{x}/{y}.png",
-  },
-  jrc_surface_water: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/transition/tiles_visual/{z}/{x}/{y}.png",
-  },
-  ghsl_built_up: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_built_up/release/v1/2025/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  ghsl_urbanization: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_degree_urbanization/release/v2/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  hansen_forest_loss: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/loss/tiles_visual/{z}/{x}/{y}.png",
-  },
-  ghsl_population: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/ghsl_population/release/v1/2025/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  viirs_nightlights: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/noaa_viirs_nightlights/release/v1/2024/tiles_visual/{z}/{x}/{y}.png",
-  },
-  copernicus_emsn194: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_emsn194/release/v1/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  modis_ndvi: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/modis_ndvi/release/v1/2024/tiles_visual/{z}/{x}/{y}.png",
-  },
-  merit_hydro_hand: {
-    urlTemplate:
-      "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/hnd/tiles_visual/{z}/{x}/{y}.png",
-  },
-  // ── Hydrology & Terrain ───────────────────────────────────────────────────
-  copernicus_dem_visual: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/copernicus_dem/release/v1/2024/porto_alegre/tiles_visual/{z}/{x}/{y}.png",
-  },
-  merit_elv: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/elv/tiles_visual/{z}/{x}/{y}.png",
-  },
-  merit_upa: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/merit_hydro/release/v1/porto_alegre/upa/tiles_visual/{z}/{x}/{y}.png",
-  },
-  jrc_occurrence: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/occurrence/tiles_visual/{z}/{x}/{y}.png",
-  },
-  jrc_seasonality: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/jrc_global_surface_water/release/v1/porto_alegre/seasonality/tiles_visual/{z}/{x}/{y}.png",
-  },
-  hansen_treecover2000: {
-    urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/hansen_forest_change/release/v1/2024/porto_alegre/tree_cover_2000/tiles_visual/{z}/{x}/{y}.png",
-  },
-  // ── CHIRPS extreme precipitation indices ──────────────────────────────────
-  chirps_r90p_2024:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r90p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_r90p_clim:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r90p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_r95p_2024:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r95p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_r95p_clim:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r95p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_r99p_2024:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/r99p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_r99p_clim:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/r99p/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_rx1day_2024: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx1day/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_rx1day_clim: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx1day/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_rx5day_2024: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/2024/rx5day/tiles_visual/{z}/{x}/{y}.png" },
-  chirps_rx5day_clim: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_precipitation/chirps/V2_0/annual_climatology/rx5day/tiles_visual/{z}/{x}/{y}.png" },
-  // ── ERA5-Land extreme temperature indices ─────────────────────────────────
-  era5_tnx_2024:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tnx/tiles_visual/{z}/{x}/{y}.png" },
-  era5_tnx_clim:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tnx/tiles_visual/{z}/{x}/{y}.png" },
-  era5_tx90p_2024: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx90p/tiles_visual/{z}/{x}/{y}.png" },
-  era5_tx90p_clim: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx90p/tiles_visual/{z}/{x}/{y}.png" },
-  era5_tx99p_2024: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/tx99p/tiles_visual/{z}/{x}/{y}.png" },
-  era5_tx99p_clim: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/tx99p/tiles_visual/{z}/{x}/{y}.png" },
-  era5_txx_2024:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/2024/txx/tiles_visual/{z}/{x}/{y}.png" },
-  era5_txx_clim:   { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/extreme_temperature/era5/land_daily_aggregated/annual_climatology/txx/tiles_visual/{z}/{x}/{y}.png" },
-  // ── Heatwave Magnitude Index (observed + projections) ─────────────────────
-  hwm_2024:      { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2024/tiles_visual/{z}/{x}/{y}.png" },
-  hwm_clim:      { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/annual_climatology/tiles_visual/{z}/{x}/{y}.png" },
-  hwm_2030s_245: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp245/tiles_visual/{z}/{x}/{y}.png" },
-  hwm_2030s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2030s_ssp585/tiles_visual/{z}/{x}/{y}.png" },
-  hwm_2050s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2050s_ssp245/tiles_visual/{z}/{x}/{y}.png" },
-  hwm_2100s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/heatwave_indices/hwm/2100s_ssp585/tiles_visual/{z}/{x}/{y}.png" },
-  // ── Flood Risk Index (observed + projections) ─────────────────────────────
-  fri_2024:      { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2024/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2030s_245: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp245/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2030s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2030s_ssp585/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2050s_245: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp245/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2050s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2050s_ssp585/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2100s_245: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp245/tiles_visual/{z}/{x}/{y}.png" },
-  fri_2100s_585: { urlTemplate: "https://geo-test-api.s3.us-east-1.amazonaws.com/nbs/porto_alegre/climate_hazards/floods/flood_risk_index/oef_calculation/2100s_ssp585/tiles_visual/{z}/{x}/{y}.png" },
+  ...CATALOG_TILE_LAYERS,
   // ── NASA GIBS: VIIRS SNPP Brightness Temp Band I5 (Day), 375m ─────────────
   // GIBS uses {z}/{y}/{x} (WMTS TileRow before TileCol), serves up to zoom 9.
   // Date: 2022-01-15 = southern-hemisphere summer peak heat in Porto Alegre.
@@ -189,6 +108,15 @@ function loadCachedData(filename: string): any | null {
     }
   }
   return null;
+}
+
+function resolveCity(req: { query: any }): CityDef {
+  return getCity(String(req.query.city ?? DEFAULT_CITY_ID));
+}
+
+// Cache filename prefix per city ("porto_alegre" → "porto-alegre-…").
+function cityFilePrefix(city: CityDef): string {
+  return city.id.replace(/_/g, "-");
 }
 
 function getBoundsFromBoundary(boundary: any): GeoBounds {
@@ -416,20 +344,39 @@ export async function registerRoutes(
 
   registerCachedRoute(app, "/api/geospatial/elevation", "porto-alegre-elevation.json", (b) => getElevationData(b));
 
-  app.get("/api/geospatial/boundary", async (_req, res) => {
+  app.get("/api/geospatial/boundary", async (req, res) => {
     try {
-      const cached = loadCachedData("porto-alegre-boundary.json");
+      const city = resolveCity(req);
+      const cached = loadCachedData(city.boundaryFile);
       if (cached) return res.json(cached);
 
-      const data = await getCityBoundary("Porto Alegre", "BR-POA");
-      saveSampleData("porto-alegre-boundary.json", data);
+      // Boundary files for new cities are vendored from the geospatial-data
+      // repo; Nominatim is only a fallback.
+      const data = await getCityBoundary(`${city.name}, ${city.region}`, city.id);
+      saveSampleData(city.boundaryFile, data);
       res.json(data);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   });
 
-  registerCachedRoute(app, "/api/geospatial/rivers", "porto-alegre-rivers.json", (b) => getRiversData("BR-POA", b));
+  app.get("/api/geospatial/rivers", async (req, res) => {
+    try {
+      const city = resolveCity(req);
+      const cacheFile = `${cityFilePrefix(city)}-rivers.json`;
+      const cached = loadCachedData(cacheFile);
+      if (cached) return res.json(cached);
+
+      const boundary = loadCachedData(city.boundaryFile);
+      if (!boundary) return res.status(400).json({ message: "Boundary not loaded yet" });
+
+      const data = await getRiversData(city.id, getBoundsFromBoundary(boundary));
+      saveSampleData(cacheFile, data);
+      res.json(data);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
   registerCachedRoute(app, "/api/geospatial/surface-water", "porto-alegre-surface-water.json", (b) => getSurfaceWaterData("BR-POA", b));
   registerCachedRoute(app, "/api/geospatial/forest", "porto-alegre-forest.json", (b) => getForestCanopyData("BR-POA", b));
   registerCachedRoute(app, "/api/geospatial/landcover", "porto-alegre-landcover.json", (b) => getLandcoverData("BR-POA", b));
@@ -493,12 +440,13 @@ export async function registerRoutes(
     const config = SITE_LAYER_CONFIGS.find((c) => c.layerId === layerId);
     if (!config) return res.status(404).json({ message: `Unknown site layer: ${layerId}` });
 
-    const cacheFile = `porto-alegre-sites-${layerId.replace("sites_", "")}.json`;
+    const city = resolveCity(req);
+    const cacheFile = `${cityFilePrefix(city)}-sites-${layerId.replace("sites_", "")}.json`;
     try {
       const cached = loadCachedData(cacheFile);
       if (cached) return res.json(cached);
 
-      const boundary = loadCachedData("porto-alegre-boundary.json");
+      const boundary = loadCachedData(city.boundaryFile);
       if (!boundary) return res.status(400).json({ message: "Boundary not loaded yet" });
 
       const bounds = getBoundsFromBoundary(boundary);
