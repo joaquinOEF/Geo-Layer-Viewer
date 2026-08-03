@@ -33,26 +33,10 @@ export interface CatalogOverride {
 }
 
 export const CATALOG_OVERRIDES: Record<string, CatalogOverride> = {
-  // ── Hazard & Risk Analysis (validated OEF products) ────────────────────────
-  poa_flood_hazard:             { name: "Flood Hazard",             icon: CloudRain,     color: "#2563eb", group: "hazard_risk" },
-  poa_heat_hazard:              { name: "Heat Hazard",              icon: Flame,         color: "#ea580c", group: "hazard_risk" },
-  poa_landslide_hazard:         { name: "Landslide Hazard",         icon: Mountain,      color: "#a16207", group: "hazard_risk" },
-  plymouth_flood_hazard:        { name: "Flood Hazard",             icon: CloudRain,     color: "#2563eb", group: "hazard_risk" },
-  plymouth_heat_hazard:         { name: "Heat Hazard",              icon: Flame,         color: "#ea580c", group: "hazard_risk" },
-  plymouth_landslide_hazard:    { name: "Landslide Hazard",         icon: Mountain,      color: "#a16207", group: "hazard_risk" },
-  plymouth_flood_risk:          { name: "Flood Risk (H×E×V)",       icon: TrendingUp,    color: "#1d4ed8", group: "hazard_risk" },
-  plymouth_heat_risk:           { name: "Heat Risk (H×E×V)",        icon: TrendingUp,    color: "#dc2626", group: "hazard_risk" },
-  plymouth_landslide_risk:      { name: "Landslide Risk (H×E×V)",   icon: TrendingUp,    color: "#a16207", group: "hazard_risk" },
-  plymouth_exposure:            { name: "Exposure Score",           icon: Users,         color: "#7b2cbf", group: "hazard_risk" },
-  plymouth_vulnerability:       { name: "Vulnerability Score",      icon: AlertTriangle, color: "#9d4edd", group: "hazard_risk" },
-  poa_flood_risk:               { name: "Flood Risk (H×E×V)",       icon: TrendingUp,    color: "#1d4ed8", group: "hazard_risk" },
-  poa_heat_risk:                { name: "Heat Risk (H×E×V)",        icon: TrendingUp,    color: "#dc2626", group: "hazard_risk" },
-  poa_landslide_risk:           { name: "Landslide Risk (H×E×V)",   icon: TrendingUp,    color: "#a16207", group: "hazard_risk" },
-  poa_flood_mechanism_type:     { name: "Flood Mechanism",          icon: Layers,        color: "#7b3294", group: "hazard_risk" },
-  poa_heat_mechanism_type:      { name: "Heat Mechanism",           icon: Layers,        color: "#d73027", group: "hazard_risk" },
-  poa_landslide_mechanism_type: { name: "Landslide Mechanism",      icon: Layers,        color: "#8c510a", group: "hazard_risk" },
-  poa_exposure:                 { name: "Exposure Score",           icon: Users,         color: "#7b2cbf", group: "hazard_risk" },
-  poa_vulnerability:            { name: "Vulnerability Score",      icon: AlertTriangle, color: "#9d4edd", group: "hazard_risk" },
+  // ── Hazard & Risk Analysis ─────────────────────────────────────────────────
+  // The per-city hazard/risk/mechanism/exposure/vulnerability products follow
+  // the `<city>_<hazard>_<kind>` naming convention and are styled by
+  // hazardRiskOverride() below — no per-city entries needed here.
 
   // ── Land Use & Urban Form ──────────────────────────────────────────────────
   dynamic_world:            { name: "Land Use (Dynamic World)",        icon: Grid3X3,  color: "#06d6a0", group: "urban_land" },
@@ -129,6 +113,44 @@ export const CATALOG_OVERRIDES: Record<string, CatalogOverride> = {
   era5land_hwm_2050s_85: { name: "Heatwave Mag. 2050s SSP5-8.5", icon: TrendingUp, color: "#f59e0b", group: "climate_projections" },
   era5land_hwm_2100s_85: { name: "Heatwave Mag. 2100s SSP5-8.5", icon: TrendingUp, color: "#fbbf24", group: "climate_projections" },
 };
+
+// ── Pattern-based overrides for per-city hazard products ─────────────────────
+// The OEF pipeline publishes `<city>_(flood|heat|landslide)_(hazard|risk)`,
+// `<city>_(flood|heat|landslide)_mechanism_type`, `<city>_exposure` and
+// `<city>_vulnerability` per onboarded city. Style them uniformly so a new
+// city needs zero override entries.
+type HazardKey = "flood" | "heat" | "landslide";
+const HAZARD_STYLE: Record<HazardKey, { label: string; icon: any; hazardColor: string; riskColor: string; mechColor: string }> = {
+  flood:     { label: "Flood",     icon: CloudRain, hazardColor: "#2563eb", riskColor: "#1d4ed8", mechColor: "#7b3294" },
+  heat:      { label: "Heat",      icon: Flame,     hazardColor: "#ea580c", riskColor: "#dc2626", mechColor: "#d73027" },
+  landslide: { label: "Landslide", icon: Mountain,  hazardColor: "#a16207", riskColor: "#a16207", mechColor: "#8c510a" },
+};
+
+function hazardRiskOverride(id: string): CatalogOverride | undefined {
+  let m = id.match(/^[a-z_]+_(flood|heat|landslide)_(hazard|risk)$/);
+  if (m) {
+    const s = HAZARD_STYLE[m[1] as HazardKey];
+    return m[2] === "hazard"
+      ? { name: `${s.label} Hazard`, icon: s.icon, color: s.hazardColor, group: "hazard_risk" }
+      : { name: `${s.label} Risk (H×E×V)`, icon: TrendingUp, color: s.riskColor, group: "hazard_risk" };
+  }
+  m = id.match(/^[a-z_]+_(flood|heat|landslide)_mechanism_type$/);
+  if (m) {
+    const s = HAZARD_STYLE[m[1] as HazardKey];
+    return { name: `${s.label} Mechanism`, icon: Layers, color: s.mechColor, group: "hazard_risk" };
+  }
+  if (/^[a-z_]+_exposure$/.test(id)) {
+    return { name: "Exposure Score", icon: Users, color: "#7b2cbf", group: "hazard_risk" };
+  }
+  if (/^[a-z_]+_vulnerability$/.test(id)) {
+    return { name: "Vulnerability Score", icon: AlertTriangle, color: "#9d4edd", group: "hazard_risk" };
+  }
+  return undefined;
+}
+
+export function getCatalogOverride(id: string): CatalogOverride | undefined {
+  return CATALOG_OVERRIDES[id] ?? hazardRiskOverride(id);
+}
 
 // Defaults by catalog dataset_type for datasets with no override entry —
 // new catalog additions render sensibly before anyone curates them.

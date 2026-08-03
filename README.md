@@ -1,6 +1,6 @@
 # Geospatial Data Visualizer
 
-An interactive, full-screen geospatial data visualizer for the OEF data catalog cities — currently **Porto Alegre, Brazil** and **Plymouth, Minnesota**. Built by the [OpenEarth Foundation](https://openearth.org) as a standalone evidence-layer viewer: load real spatial datasets from the OEF geospatial catalog, OSM, IBGE, and transit feeds, toggle them on the map, and read actual decoded values on hover.
+An interactive, full-screen geospatial data visualizer for the OEF data catalog cities — currently **Porto Alegre, Brazil** and five Minnesota cities (**Plymouth, Edina, Richfield, Rochester, Apple Valley**). Built by the [OpenEarth Foundation](https://openearth.org) as a standalone evidence-layer viewer: load real spatial datasets from the OEF geospatial catalog, OSM, IBGE, and transit feeds, toggle them on the map, and read actual decoded values on hover.
 
 ## Multi-city & catalog sync
 
@@ -18,7 +18,7 @@ The script probes every dataset's visual and value tile pyramids at each city's 
 
 ## Features
 
-- **Full-screen Leaflet map** — CartoDB Dark Matter basemap, city selector (Porto Alegre / Plymouth), city boundary overlay, smooth zoom/pan
+- **Full-screen Leaflet map** — CartoDB Dark Matter basemap, city selector (Porto Alegre + 5 Minnesota cities), city boundary overlay, smooth zoom/pan
 - **66 active data layers** across three sections and eight thematic groups — OEF raster tiles, GeoJSON vector layers, and client-side spatial queries
 - **Real value decoding** — 17 layers (CHIRPS precipitation, Flood Risk Index, Heatwave Magnitude, Dynamic World land cover, census indicators, solar potential, spatial queries) decode raw RGB-encoded pixel values or GeoJSON properties into actual numbers on hover
 - **Spatial query layers** — client-side vector × raster intersection: settlements filtered by OEF FRI raster, bus routes filtered by OEF HWM raster; raster value attached to each passing feature
