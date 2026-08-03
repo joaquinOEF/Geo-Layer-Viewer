@@ -1,7 +1,7 @@
 # Geospatial Data Visualizer
 
 ## Overview
-A standalone geospatial data visualizer for OEF data-catalog cities (Porto Alegre, Brazil and Plymouth, Minnesota; city selector in the header). Full-screen interactive Leaflet map with real evidence layers from the OEF geospatial catalog, OSM, IBGE, and EPTC transit feeds. Users toggle layers and read decoded values; no synthetic data, no mock values anywhere.
+A standalone geospatial data visualizer for OEF data-catalog cities (Porto Alegre, Brazil + Plymouth, Edina, Richfield, Rochester and Apple Valley, Minnesota; city selector in the header). Full-screen interactive Leaflet map with real evidence layers from the OEF geospatial catalog, OSM, IBGE, and EPTC transit feeds. Users toggle layers and read decoded values; no synthetic data, no mock values anywhere.
 
 ## Critical Rules
 - **NEVER use synthetic/mock/placeholder data** — always real data from real sources

@@ -111,12 +111,12 @@ const ALL_CITY_IDS = CITIES.map((c) => c.id);
 // Generated from shared/generated/catalog.json (npm run sync:catalog); display
 // cosmetics come from catalog-overrides.ts. A layer appears for a city only if
 // the sync script confirmed its visual tiles are actually reachable there.
-import { CATALOG_OVERRIDES, TYPE_DEFAULTS, FALLBACK_DEFAULT } from "./catalog-overrides";
+import { getCatalogOverride, TYPE_DEFAULTS, FALLBACK_DEFAULT } from "./catalog-overrides";
 
 const CATALOG_LAYER_CONFIGS: LayerConfig[] = (catalog.datasets as any[])
   .filter((d) => Object.values(d.availability ?? {}).some((a: any) => a.visual))
   .map((d) => {
-    const override = CATALOG_OVERRIDES[d.id] ?? {};
+    const override = getCatalogOverride(d.id) ?? {};
     const defaults = TYPE_DEFAULTS[d.datasetType ?? ""] ?? FALLBACK_DEFAULT;
     const cities = Object.entries(d.availability as Record<string, { visual: boolean }>)
       .filter(([, a]) => a.visual)
