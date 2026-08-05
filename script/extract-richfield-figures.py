@@ -87,7 +87,19 @@ TOL = 30           # max RGB distance to a class colour before a pixel is "not i
 MIN_AREA_M2 = 150  # drop specks smaller than this (≈ 44 px at 1.85 m/px)
 
 
-def class_masks_diff(img, base, body, class_rgbs):
+def furniture_mask(base):
+    """Labels and road casings in the shared basemap, dilated to catch halos."""
+    H, W, _ = base.shape
+    raw = (base.min(2) > 225) | (base.max(2) < 70)
+    pad = np.pad(raw, 2)
+    out = np.zeros_like(raw)
+    for dy in range(5):
+        for dx in range(5):
+            out |= pad[dy:dy + H, dx:dx + W]
+    return out
+
+
+def class_masks_diff(img, base, body, class_rgbs, furniture):
     """Classify by DIFFERENCE against the clean basemap, not by absolute colour.
 
     Why: only the prioritization figure (p31) paints opaque fills. The
@@ -110,6 +122,18 @@ def class_masks_diff(img, base, body, class_rgbs):
     d = O - B
     mag = np.linalg.norm(d, axis=1)
     changed = mag > 18
+
+    # Drop map furniture. Labels (near-white with halos) and road casings /
+    # outlines (near-black) are drawn OVER the fills, so they differ from the
+    # basemap just enough to survive the difference test and then get classified
+    # into whichever class their colour shift happens to point at. The visible
+    # symptom is street and lake names appearing inside a polygon as a wrong
+    # class, and text-shaped holes punched through fills.
+    #
+    # Every city-wide layout shares one map template, so furniture sits in the
+    # same place on every figure — identify it once from the basemap and mask it
+    # everywhere.
+    changed &= ~furniture[body]
 
     out = []
     if len(class_rgbs) == 1:
@@ -217,16 +241,34 @@ def fit_affine(img):
             out.append((cur[0] + cur[-1]) / 2 + off)
         return out
 
-    # The page/figure frame also reads as a long dark run. Drop anything within
-    # 120 px of the image edge — an earlier version took the frame as the city's
-    # west edge and as both horizontal edges, which silently corrupted the scale.
-    M = 120
-    vs = [x for x in runs(dark.sum(0), 20) if M < x < W - M]
-    hs = [y for y in runs(dark.sum(1), 20) if M < y < H - M]
+    # Find the FIGURE FRAME first, then look for the city boundary strictly
+    # inside it. A fixed pixel margin does not work: the frame sits ~150 px from
+    # the image edge, so a 120 px margin let it through, `min(vs)` took the frame
+    # as the city's west edge, and every layer shipped 736 m too far east. The
+    # vertical axis escaped only because its frame rows happened to fall outside
+    # the same window — i.e. the margin approach was never right, just lucky on
+    # one axis.
+    vs_all = runs(dark.sum(0), 20)
+    hs_all = runs(dark.sum(1), 20)
+    if len(vs_all) < 2 or len(hs_all) < 2:
+        raise ValueError(f'figure frame not found (V={vs_all}, H={hs_all})')
+    fx0, fx1 = min(vs_all), max(vs_all)      # frame verticals
+    fy0, fy1 = min(hs_all), max(hs_all)      # frame horizontals
+    INSET = 30
+    vs = [x for x in vs_all if fx0 + INSET < x < fx1 - INSET]
+    hs = [y for y in hs_all if fy0 + INSET < y < fy1 - INSET]
     if len(vs) < 1 or len(hs) < 2:
-        raise ValueError(f'boundary edges not found (V={vs}, H={hs})')
+        raise ValueError(f'city boundary edges not found inside the frame '
+                         f'(frame x {fx0:.0f}..{fx1:.0f}, y {fy0:.0f}..{fy1:.0f}; '
+                         f'V={vs}, H={hs})')
     x_w = min(vs)
     y_n, y_s = min(hs), max(hs)
+
+    # Guard: the west edge must sit well inside the frame. If this trips, the
+    # detector has locked onto furniture again.
+    if not (fx0 + 200 < x_w < fx1 - 200):
+        raise ValueError(f'west city edge {x_w:.0f} implausible inside frame '
+                         f'{fx0:.0f}..{fx1:.0f}')
 
     coords = boundary_coords()
     la_max = max(c[1] for c in coords)
@@ -323,9 +365,13 @@ def run(fig):
     if fig.get('opaque'):
         masks = class_masks(img, body, rgbs)
     else:
-        masks = class_masks_diff(img, base, body, rgbs)
-    masks = [morphology.remove_small_objects(
-                 morphology.binary_closing(m, morphology.disk(2)), 60)
+        masks = class_masks_diff(img, base, body, rgbs, furniture_mask(base))
+    # Close first (bridges the gaps furniture left behind), then drop specks,
+    # then fill the holes text punched through the middle of a fill.
+    masks = [morphology.remove_small_holes(
+                 morphology.remove_small_objects(
+                     morphology.binary_closing(m, morphology.disk(3)), 60),
+                 area_threshold=400)
              for m in masks]
     areas = {}
     for (cls_name, rgb), mask in zip(fig['classes'], masks):
