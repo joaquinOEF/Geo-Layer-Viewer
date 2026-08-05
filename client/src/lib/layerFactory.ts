@@ -3,6 +3,7 @@ import {
   RICHFIELD_FLOOD_LAYERS,
   RICHFIELD_FLOOD_DERIVED_NOTE,
   RICHFIELD_FLOOD_SOURCE,
+  RICHFIELD_SCORE_INTERPRETATION,
   isRichfieldFloodLayer,
   richfieldFloodColor,
 } from "@shared/richfield-flood";
@@ -369,6 +370,7 @@ export function createLayerFromData(layerId: string, data: any): L.Layer | null 
                  <strong>${label}</strong><br/>
                  <span style="color:#94a3b8;">Figure ${def.figure} · ${RICHFIELD_FLOOD_SOURCE}</span><br/>
                  <span style="color:#fbbf24;">${RICHFIELD_FLOOD_DERIVED_NOTE}</span>
+                 ${def.classes ? `<br/><span style="color:#94a3b8;">${RICHFIELD_SCORE_INTERPRETATION}</span>` : ""}
                </div>`,
               { sticky: true }
             );

@@ -116,6 +116,45 @@ export const RICHFIELD_FLOOD_SOURCE =
 export const RICHFIELD_FLOOD_SOURCE_URL =
   'https://cms9files.revize.com/richfieldmn/Richfield_FloodRiskPrioritization.pdf';
 
+/**
+ * HOW TO READ THE PRIORITIZATION SCORE — and why 0 does not mean "safe".
+ *
+ * Barr's combined score weights five criteria, and three of them score exactly
+ * zero by design. Those three carry 80% of the total weight:
+ *
+ *   40%  Number of flood-prone structures  — "No flood-prone structures" = 0
+ *   25%  Frequency of flooding             — "No flooding of structure(s)
+ *                                             during a 100-year event" = 0
+ *   15%  Critical infrastructure           — "Critical infrastructure is not
+ *                                             located in flood-risk area" = 0
+ *
+ * The remaining two (storm sewer conditions, SVI) floor at 1, so the minimum
+ * achievable weighted score is about 0.2 and the "0.0 – 2.4" band is genuinely
+ * populated.
+ *
+ * So a low-scoring polygon means: **water collects here, but nothing there gets
+ * damaged.** It is still a mapped flood-risk area — it made it into the PCSWMM
+ * inundation model and into the prioritization set. It scored low on
+ * CONSEQUENCE, not on HAZARD.
+ *
+ * This is borne out on the ground. Share of each class falling on parks, open
+ * land or water:
+ *
+ *   0.0 – 2.4   44.5%
+ *   2.5 – 4.4   80.5%   (inflated by Wood Lake, one very large polygon)
+ *   4.5 – 6.4   41.0%
+ *   6.5 – 10     6.8%   ← the top class is 93% on built land
+ *
+ * ⚠️ The ranking can INVERT for nature-based solutions. Barr's score answers
+ * "where should the city spend money to prevent damage?", which is right for a
+ * capital plan. A place that floods reliably, is publicly owned and has no
+ * buildings to protect is close to an ideal NBS site — space is available and
+ * nothing has to be bought out. Those are exactly the polygons this score
+ * deprioritises.
+ */
+export const RICHFIELD_SCORE_INTERPRETATION =
+  'Low score = floods but damages nothing (80% of the weight is structures & infrastructure). Not "safe" — low consequence, not low hazard. For NBS siting this ranking can invert.';
+
 /** Shown on every hover. Blunt on purpose. */
 export const RICHFIELD_FLOOD_DERIVED_NOTE =
   'Reconstructed from the published PDF figure — not the source GIS. Screening use only.';
