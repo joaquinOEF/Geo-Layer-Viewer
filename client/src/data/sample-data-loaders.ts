@@ -1,4 +1,5 @@
 import { getCity } from "@shared/cities";
+import { RICHFIELD_FLOOD_LAYERS } from "@shared/richfield-flood";
 
 const sampleDataCache = new Map<string, any>();
 
@@ -55,6 +56,13 @@ const CITY_AWARE_API_LAYERS = new Set([
 export async function loadLayerData(layerId: string, cityId: string): Promise<any> {
   const city = getCity(cityId);
   const prefix = city.id.replace(/_/g, "-");
+
+  // Richfield flood layers ship as static files — they are traced from a PDF,
+  // not fetched from any live source, so there is no API path to fall back to.
+  const richfield = RICHFIELD_FLOOD_LAYERS.find((l) => l.id === layerId);
+  if (richfield) {
+    return await loadSampleData(`/sample-data/${richfield.file}`);
+  }
 
   const poaSamplePaths: Record<string, string> = {
     grid_flood: "/sample-data/porto-alegre-grid.json",

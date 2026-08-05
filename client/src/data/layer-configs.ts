@@ -33,6 +33,7 @@ export type LayerGroup =
   | "climate_projections"
   | "base_layers"
   | "sites"
+  | "municipal_reports"
   | "spatial_queries";
 
 // Value-tile encoding, translated from the OEF catalog (datasets.yaml) by
@@ -102,6 +103,7 @@ export const LAYER_GROUPS: LayerGroupDef[] = [
   { id: "climate_projections",label: "Climate Projections",      section: "oef_catalog"    },
   { id: "base_layers",        label: "Base Layers",              section: "derived"        },
   { id: "sites",              label: "Climate Sites",            section: "derived"        },
+  { id: "municipal_reports",  label: "Municipal Reports (reconstructed)", section: "derived" },
   { id: "spatial_queries",    label: "Spatial Queries",          section: "postprocessing" },
 ];
 
@@ -112,6 +114,7 @@ const ALL_CITY_IDS = CITIES.map((c) => c.id);
 // cosmetics come from catalog-overrides.ts. A layer appears for a city only if
 // the sync script confirmed its visual tiles are actually reachable there.
 import { getCatalogOverride, TYPE_DEFAULTS, FALLBACK_DEFAULT } from "./catalog-overrides";
+import { RICHFIELD_FLOOD_LAYERS, richfieldFloodColor } from "@shared/richfield-flood";
 
 const CATALOG_LAYER_CONFIGS: LayerConfig[] = (catalog.datasets as any[])
   .filter((d) => Object.values(d.availability ?? {}).some((a: any) => a.visual))
@@ -200,9 +203,27 @@ const STATIC_LAYER_CONFIGS: LayerConfig[] = [
   },
 ];
 
+// ── Richfield MN flood-risk layers ──────────────────────────────────────────
+// Recovered from the city's published stormwater report. They sit in their own
+// group, labelled "reconstructed", because they are traced from PDF figures
+// rather than fetched from a source dataset — see shared/richfield-flood.ts for
+// the method and the limits.
+const RICHFIELD_FLOOD_LAYER_CONFIGS: LayerConfig[] = RICHFIELD_FLOOD_LAYERS.map((l) => ({
+  id: l.id,
+  name: l.name,
+  icon: l.classes ? AlertTriangle : Waves,
+  color: richfieldFloodColor(l.id, l.classes ? l.classes[l.classes.length - 1] : null),
+  source: "geojson" as const,
+  group: "municipal_reports" as const,
+  available: true,
+  cities: ["richfield"],
+  hasValueTiles: false,
+}));
+
 export const LAYER_CONFIGS: LayerConfig[] = [
   ...CATALOG_LAYER_CONFIGS,
   ...STATIC_LAYER_CONFIGS,
+  ...RICHFIELD_FLOOD_LAYER_CONFIGS,
 ];
 
 export function getLayersForCity(cityId: string): LayerConfig[] {
