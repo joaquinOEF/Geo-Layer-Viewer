@@ -23,6 +23,15 @@
 //     (richfield-boundary.json). The city is a near-rectangle, so its west,
 //     north and south edges are long straight dashed runs a scan finds
 //     reliably; two give the scale, the third the offset.
+//
+//     ⚠️ The first release of these layers was 736 m too far EAST. The edge
+//     detector used a fixed pixel margin to ignore the page frame, but the
+//     frame sits ~150 px in and the margin was 120 px, so `min()` took the
+//     FRAME as the city's west edge. The vertical axis escaped only because
+//     its frame rows happened to fall outside the same window — the margin
+//     approach was never right, just lucky on one axis. It now finds the frame
+//     first and searches strictly inside it, with a guard that rejects a west
+//     edge implausibly close to the frame.
 //   * The notched EASTERN side, around the airport, was held out of the fit
 //     entirely and used as an independent check.
 //   * Ground resolution ~1.85 m/px at 300 dpi.
@@ -61,19 +70,19 @@ export const RICHFIELD_FLOOD_LAYERS: RichfieldFloodLayerDef[] = [
   },
   {
     id: 'rf_inundation_10yr', name: 'Inundation — 10-year Storm',
-    file: 'richfield-flood-inundation-10yr.json', figure: '3-2', areaHa: 259, classes: null,
+    file: 'richfield-flood-inundation-10yr.json', figure: '3-2', areaHa: 248, classes: null,
   },
   {
     id: 'rf_inundation_100yr', name: 'Inundation — 100-year Storm',
-    file: 'richfield-flood-inundation-100yr.json', figure: '3-3', areaHa: 440, classes: null,
+    file: 'richfield-flood-inundation-100yr.json', figure: '3-3', areaHa: 431, classes: null,
   },
   {
     id: 'rf_inundation_mce100', name: 'Inundation — MCE 100-year Storm',
-    file: 'richfield-flood-inundation-mce100.json', figure: '3-4', areaHa: 485, classes: null,
+    file: 'richfield-flood-inundation-mce100.json', figure: '3-4', areaHa: 500, classes: null,
   },
   {
     id: 'rf_prioritization_score', name: 'Flood-Risk Prioritization Score',
-    file: 'richfield-flood-prioritization-score.json', figure: '4-7', areaHa: 301,
+    file: 'richfield-flood-prioritization-score.json', figure: '4-7', areaHa: 308,
     classes: ['0.0 - 2.4', '2.5 - 4.4', '4.5 - 6.4', '6.5 - 10'],
   },
 ];
