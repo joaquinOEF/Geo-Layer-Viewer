@@ -145,6 +145,23 @@ export const RICHFIELD_FLOOD_SOURCE_URL =
  *   4.5 – 6.4   41.0%
  *   6.5 – 10     6.8%   ← the top class is 93% on built land
  *
+ * ⚠️ THESE POLYGONS ARE A FOOTPRINT, NOT A COUNT OF FLOOD-RISK AREAS.
+ * The report states 746 flood-risk areas evaluated, 601 of them inside the
+ * city. This layer carries 353 polygons. The difference is method, not loss of
+ * coverage: contour tracing merges adjacent areas that share a score band into
+ * one polygon, the morphological closing joins near neighbours, and specks under
+ * 150 m² are dropped.
+ *
+ * Consequences:
+ *   ✗ do not count flood-risk areas from this layer
+ *   ✗ do not try to join it to the report's FPA_#### identifiers
+ *   ✓ do use it for where flood risk is and how severe, which is preserved
+ *
+ * (Nesting was verified as a separate check and passes: 2yr ⊆ 10yr ⊆ 100yr ⊆
+ * MCE100, with only 0.4% / 0.8% / 7.2% of each smaller extent falling outside
+ * the next larger — strong evidence the georeferencing and classification are
+ * sound, since either being wrong would break containment badly.)
+ *
  * ⚠️ The ranking can INVERT for nature-based solutions. Barr's score answers
  * "where should the city spend money to prevent damage?", which is right for a
  * capital plan. A place that floods reliably, is publicly owned and has no
