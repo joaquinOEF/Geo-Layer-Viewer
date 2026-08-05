@@ -1,5 +1,12 @@
 import L from "leaflet";
 import {
+  RICHFIELD_FLOOD_LAYERS,
+  RICHFIELD_FLOOD_DERIVED_NOTE,
+  RICHFIELD_FLOOD_SOURCE,
+  isRichfieldFloodLayer,
+  richfieldFloodColor,
+} from "@shared/richfield-flood";
+import {
   getSolarColor,
   getPovertyColor,
 } from "@/data/colors";
@@ -335,7 +342,40 @@ export function createLayerFromData(layerId: string, data: any): L.Layer | null 
       return group;
     }
 
-    default:
+    default: {
+      // Richfield flood layers — reconstructed polygons from the city's
+      // stormwater report. Single-class extents get one fill; the
+      // prioritization layer is a 4-class choropleth keyed on feature.class.
+      if (isRichfieldFloodLayer(layerId)) {
+        const geoJson = data?.type === "FeatureCollection" ? data : data?.geoJson || data;
+        if (!geoJson?.features?.length) return null;
+        const def = RICHFIELD_FLOOD_LAYERS.find((l) => l.id === layerId)!;
+        return L.geoJSON(geoJson as any, {
+          style: (feature: any) => {
+            const fill = richfieldFloodColor(layerId, feature?.properties?.class);
+            return {
+              color: fill,
+              weight: 0.6,
+              opacity: 0.9,
+              fillColor: fill,
+              fillOpacity: 0.65,
+            };
+          },
+          onEachFeature: (feature: any, layer: L.Layer) => {
+            const cls = feature?.properties?.class;
+            const label = def.classes && cls && cls !== "extent" ? `Score ${cls}` : def.name;
+            (layer as any).bindTooltip(
+              `<div style="font-family: system-ui; font-size: 11px; max-width: 240px;">
+                 <strong>${label}</strong><br/>
+                 <span style="color:#94a3b8;">Figure ${def.figure} · ${RICHFIELD_FLOOD_SOURCE}</span><br/>
+                 <span style="color:#fbbf24;">${RICHFIELD_FLOOD_DERIVED_NOTE}</span>
+               </div>`,
+              { sticky: true }
+            );
+          },
+        });
+      }
       return null;
+    }
   }
 }
