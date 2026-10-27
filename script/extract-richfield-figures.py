@@ -26,6 +26,8 @@ import sys
 
 import numpy as np
 from PIL import Image
+from pyproj import Geod
+from scipy import ndimage
 from skimage import measure, morphology
 from shapely.geometry import Polygon, shape
 from shapely.ops import unary_union
@@ -36,6 +38,15 @@ BOUNDARY = ('/Users/jvp/Claude/work/oef/geo-layer-viewer/client/public/'
             'sample-data/richfield-boundary.json')
 DPI = 300
 R = 6378137.0
+GEOD = Geod(ellps='WGS84')
+SAMPLE_DATA = os.path.join(os.path.dirname(S), 'client', 'public', 'sample-data')
+SHIPPED = {
+    'inundation_2yr': 'richfield-flood-inundation-2yr.json',
+    'inundation_10yr': 'richfield-flood-inundation-10yr.json',
+    'inundation_100yr': 'richfield-flood-inundation-100yr.json',
+    'inundation_mce100': 'richfield-flood-inundation-mce100.json',
+    'prioritization_score': 'richfield-flood-prioritization-score.json',
+}
 
 
 def merc(lon, lat):
@@ -305,30 +316,61 @@ def verify(img, s, tx, ty):
     return hit / max(len(east), 1)
 
 
+def fill_furniture_holes(mask, furniture, min_share=0.5):
+    """Fill a hole only when it is mostly map furniture.
+
+    Masking labels leaves text-shaped holes in the fill. A fixed-size hole fill
+    cannot tell those from real dry ground: 400 px closes letters on a street but
+    not "Wood Lake" with its halo (thousands of px), and any threshold large
+    enough for that also fills genuine islands. So decide by what is IN the hole.
+    On the 100-year figure this fills 29 label holes and keeps 109 real ones.
+    """
+    holes = ndimage.binary_fill_holes(mask) & ~mask
+    lab, n = ndimage.label(holes)
+    if n == 0:
+        return mask
+    idx = np.arange(1, n + 1)
+    share = ndimage.sum(furniture, lab, idx) / ndimage.sum(np.ones_like(mask), lab, idx)
+    return mask | np.r_[False, share >= min_share][lab]
+
+
 def trace(mask, s, tx, ty, min_area_px):
-    """Binary mask -> list of lon/lat rings via marching squares."""
+    """Binary mask -> list of lon/lat polygons (exterior + holes).
+
+    find_contours returns exterior AND hole boundaries as separate rings. Writing
+    each as its own filled polygon (the previous behaviour) filled every real
+    island and double-counted ~4% of the area. Instead, per connected component,
+    fold the rings with even-odd (XOR), which keeps holes as holes.
+    """
     polys = []
-    padded = np.pad(mask.astype(float), 1)
-    for c in measure.find_contours(padded, 0.5):
-        if len(c) < 8:
+    lab, n = ndimage.label(mask)
+    for i, sl in enumerate(ndimage.find_objects(lab), start=1):
+        if sl is None:
             continue
-        ring = [(x - 1, y - 1) for y, x in c]          # (row,col) -> (x,y)
-        p = Polygon(ring)
-        if not p.is_valid:
-            p = p.buffer(0)
-        if p.is_empty or p.area < min_area_px:
+        comp = lab[sl] == i
+        if comp.sum() < min_area_px:
             continue
-        p = p.simplify(0.8, preserve_topology=True)
-        if p.is_empty:
+        oy, ox = sl[0].start, sl[1].start
+        geom = None
+        for c in measure.find_contours(np.pad(comp.astype(float), 1), 0.5):
+            if len(c) < 4:
+                continue
+            p = Polygon([(x - 1 + ox, y - 1 + oy) for y, x in c]).buffer(0)
+            if p.is_empty:
+                continue
+            geom = p if geom is None else geom.symmetric_difference(p)
+        if geom is None or geom.is_empty or geom.area < min_area_px:
             continue
-        geoms = [p] if p.geom_type == 'Polygon' else list(p.geoms)
-        for gp in geoms:
-            lonlat = [list(unmerc(tx + s * x, ty - s * y))
-                      for x, y in gp.exterior.coords]
-            lonlat = [[round(a, 6), round(b, 6)] for a, b in lonlat]
-            if len(lonlat) >= 4:
-                polys.append(lonlat)
-    return polys
+        geom = geom.simplify(0.8, preserve_topology=True)
+        for gp in ([geom] if geom.geom_type == 'Polygon' else list(geom.geoms)):
+            if gp.geom_type != 'Polygon' or gp.is_empty:
+                continue
+            # drop holes smaller than a speck, same rule as for polygons
+            holes = [h for h in gp.interiors if Polygon(h).area >= min_area_px]
+            polys.append(Polygon(gp.exterior, holes))
+    return [Polygon([unmerc(tx + s * x, ty - s * y) for x, y in p.exterior.coords],
+                    [[unmerc(tx + s * x, ty - s * y) for x, y in h.coords] for h in p.interiors])
+            for p in polys]
 
 
 _CLIP = None
@@ -362,40 +404,42 @@ def run(fig):
     # it also flags the basemap's own desaturation treatment — so the two modes
     # are declared per figure rather than guessed.
     rgbs = [rgb for _, rgb in fig['classes']]
+    furniture = furniture_mask(base)
     if fig.get('opaque'):
         masks = class_masks(img, body, rgbs)
     else:
-        masks = class_masks_diff(img, base, body, rgbs, furniture_mask(base))
-    # Close first (bridges the gaps furniture left behind), then drop specks,
-    # then fill the holes text punched through the middle of a fill.
-    masks = [morphology.remove_small_holes(
+        masks = class_masks_diff(img, base, body, rgbs, furniture)
+    # Close first (bridges the gaps furniture left behind), drop specks, then
+    # fill only the holes that labels and casings punched through a fill. Every
+    # layout shares one template, so the basemap's furniture mask applies to the
+    # opaque figure too.
+    masks = [fill_furniture_holes(
                  morphology.remove_small_objects(
                      morphology.binary_closing(m, morphology.disk(3)), 60),
-                 area_threshold=400)
+                 furniture)
              for m in masks]
     areas = {}
+    clip = clip_poly()
     for (cls_name, rgb), mask in zip(fig['classes'], masks):
-        rings = trace(mask, s, tx, ty, min_area_px)
-        area_m2 = mask.sum() * ground_m ** 2
-        areas[cls_name] = area_m2
-        clip = clip_poly()
-        for ring in rings:
-            g = Polygon(ring).buffer(0)
-            if g.is_empty:
-                continue
-            g = g.intersection(clip)
-            if g.is_empty:
-                continue
-            for gp in ([g] if g.geom_type == 'Polygon' else list(g.geoms)):
+        shapes = trace(mask, s, tx, ty, min_area_px)
+        kept = []
+        for g in shapes:
+            g = g.buffer(0).intersection(clip)
+            for gp in ([g] if g.geom_type == 'Polygon' else list(getattr(g, 'geoms', []))):
                 if gp.geom_type != 'Polygon' or gp.is_empty:
                     continue
-                coords = [[round(x, 6), round(y, 6)] for x, y in gp.exterior.coords]
-                if len(coords) >= 4:
+                rings = [[[round(x, 6), round(y, 6)] for x, y in r.coords]
+                         for r in [gp.exterior, *gp.interiors]]
+                if len(rings[0]) >= 4:
+                    kept.append(gp)
                     feats.append({'type': 'Feature',
                                   'properties': {'class': cls_name, 'layer': fig['id']},
-                                  'geometry': {'type': 'Polygon', 'coordinates': [coords]}})
-        print(f"    {cls_name:<42} {mask.sum():>8,} px  {area_m2/10000:7.1f} ha  "
-              f"{len(rings):>4} polygons")
+                                  'geometry': {'type': 'Polygon', 'coordinates': rings}})
+        # Area inside the city, of the union — what a user querying the file gets.
+        area_m2 = abs(GEOD.geometry_area_perimeter(unary_union(kept))[0]) if kept else 0.0
+        areas[cls_name] = area_m2
+        print(f"    {cls_name:<42} {mask.sum():>8,} px  {area_m2/10000:7.1f} ha in city  "
+              f"{len(kept):>4} polygons  {sum(len(p.interiors) for p in kept):>4} holes")
 
     out = {
         'type': 'FeatureCollection',
@@ -421,17 +465,61 @@ def run(fig):
                        'This is alpha-invariant, which matters because most of these fills are '
                        'semi-transparent over the aerial basemap.'),
             'note': ('Polygons are traced from rendered pixels: edges are accurate to a few '
-                     'metres, interior holes are not preserved, and specks under '
+                     'metres. Real holes (dry islands) are preserved; holes punched by map '
+                     'labels and road casings are filled. Specks and holes under '
                      f'{MIN_AREA_M2} m² are dropped. Do not use for engineering or regulatory '
                      'purposes — request the source GIS from the City of Richfield.'),
+            'area_ha_in_city': round(sum(areas.values()) / 1e4, 1),
         },
         'features': feats,
     }
-    p = f"{S}/richfield_{fig['id']}.geojson"
+    # Layers the viewer ships go straight to sample-data; the SVI layer is
+    # recovered only for comparison (its source is a public download).
+    ship = SHIPPED.get(fig['id'])
+    p = f"{SAMPLE_DATA}/{ship}" if ship else f"{S}/richfield_{fig['id']}.geojson"
     json.dump(out, open(p, 'w'), ensure_ascii=False)
     print(f"    -> {len(feats)} polygons, {os.path.getsize(p)/1024:.0f} KB, "
           f"east-edge check {east_hit*100:.0f}%\n")
     return fig['id'], len(feats), east_hit, areas
+
+
+NESTED = ['inundation_2yr', 'inundation_10yr', 'inundation_100yr', 'inundation_mce100']
+
+
+def enforce_nesting():
+    """2yr ⊆ 10yr ⊆ 100yr ⊆ MCE100 must hold physically. Where a smaller storm
+    floods outside a larger one, the larger layer missed those pixels — its
+    pale or greyish fill is harder to separate from the aerial — so the fix is
+    to add them to the larger layer, never to cut the smaller one.
+
+    The MCE fill (#598aa3) is the hardest: once real holes were preserved,
+    8.6 ha of MCE "holes" turned out to be flooded in the 100-year layer.
+
+    Violation is measured and reported BEFORE enforcing, so it stays usable as
+    a check on georeferencing and classification.
+    """
+    prev = None
+    for fid in NESTED:
+        p = f"{SAMPLE_DATA}/{SHIPPED[fid]}"
+        fc = json.load(open(p))
+        cur = unary_union([shape(f['geometry']) for f in fc['features']])
+        if prev is not None:
+            outside = prev.difference(cur)
+            pct = abs(GEOD.geometry_area_perimeter(outside)[0]) / abs(GEOD.geometry_area_perimeter(prev)[0]) * 100
+            print(f"  {fid:<20} smaller storm outside it before enforcing: {pct:4.1f}%")
+            cur = unary_union([cur, prev])
+            parts = [cur] if cur.geom_type == 'Polygon' else list(cur.geoms)
+            fc['features'] = [{'type': 'Feature', 'properties': {'class': 'extent', 'layer': fid},
+                               'geometry': {'type': 'Polygon', 'coordinates':
+                                            [[[round(x, 6), round(y, 6)] for x, y in r.coords]
+                                             for r in [g.exterior, *g.interiors]]}}
+                              for g in parts if g.geom_type == 'Polygon']
+            fc['provenance']['nesting_violation_before_pct'] = round(pct, 1)
+            fc['provenance']['area_ha_in_city'] = round(abs(GEOD.geometry_area_perimeter(cur)[0]) / 1e4, 1)
+            json.dump(fc, open(p, 'w'), ensure_ascii=False)
+        print(f"  {fid:<20} {fc['provenance']['area_ha_in_city']:7.1f} ha in city, "
+              f"{len(fc['features'])} polygons")
+        prev = cur
 
 
 if __name__ == '__main__':
@@ -442,3 +530,5 @@ if __name__ == '__main__':
         print(f"{fig['id']:<24} (page {fig['page']}) {fig['name']}")
         results.append(run(fig))
     print('recovered:', [r[0] for r in results])
+    print('\nnesting (2yr ⊆ 10yr ⊆ 100yr ⊆ MCE100):')
+    enforce_nesting()

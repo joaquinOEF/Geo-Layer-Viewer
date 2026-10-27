@@ -41,7 +41,19 @@
 //
 // The check that caught the one serious error: the 2-year extent initially came
 // out LARGER than the 100-year, which is physically impossible. The corrected
-// areas are monotonic — 185 / 259 / 440 / 485 ha for 2 / 10 / 100 / MCE100-year.
+// areas are monotonic — 97 / 160 / 304 / 375 ha for 2 / 10 / 100 / MCE100-year,
+// measured inside the city limit on the union of each layer's polygons.
+//
+// Map furniture: labels and road casings are found once on the clean basemap and
+// ignored. The holes they punch through a fill are closed ONLY when a hole is
+// mostly furniture, so "Wood Lake" closes while real dry islands stay open.
+// (An earlier tracer wrote every hole as an extra filled polygon. That looked
+// clean but filled real islands and double-counted ~4% of the area.)
+//
+// Nesting 2yr ⊆ 10yr ⊆ 100yr ⊆ MCE100 is ENFORCED after tracing: a smaller storm's
+// extent is added to every larger one. The violation is measured first and kept
+// in each file's provenance — 0.4% / 0.9% / 10.1%. The MCE fill (#598aa3) is the
+// hardest to separate from the aerial, so it under-detects most.
 //
 // Deliberately NOT included: the report's Social Vulnerability Index figure.
 // Its source (CDC/ATSDR SVI) is a free public download cited in the report's own
@@ -57,7 +69,7 @@ export interface RichfieldFloodLayerDef {
   file: string;
   /** Figure number in the source report. */
   figure: string;
-  /** Recovered extent, hectares — sanity anchor for reviewers. */
+  /** Recovered extent inside the city limit, hectares (union) — sanity anchor for reviewers. */
   areaHa: number;
   /** Ordinal classes, ascending, or null for a single-class extent layer. */
   classes: string[] | null;
@@ -66,23 +78,23 @@ export interface RichfieldFloodLayerDef {
 export const RICHFIELD_FLOOD_LAYERS: RichfieldFloodLayerDef[] = [
   {
     id: 'rf_inundation_2yr', name: 'Inundation — 2-year Storm',
-    file: 'richfield-flood-inundation-2yr.json', figure: '3-1', areaHa: 185, classes: null,
+    file: 'richfield-flood-inundation-2yr.json', figure: '3-1', areaHa: 97, classes: null,
   },
   {
     id: 'rf_inundation_10yr', name: 'Inundation — 10-year Storm',
-    file: 'richfield-flood-inundation-10yr.json', figure: '3-2', areaHa: 248, classes: null,
+    file: 'richfield-flood-inundation-10yr.json', figure: '3-2', areaHa: 160, classes: null,
   },
   {
     id: 'rf_inundation_100yr', name: 'Inundation — 100-year Storm',
-    file: 'richfield-flood-inundation-100yr.json', figure: '3-3', areaHa: 431, classes: null,
+    file: 'richfield-flood-inundation-100yr.json', figure: '3-3', areaHa: 304, classes: null,
   },
   {
     id: 'rf_inundation_mce100', name: 'Inundation — MCE 100-year Storm',
-    file: 'richfield-flood-inundation-mce100.json', figure: '3-4', areaHa: 500, classes: null,
+    file: 'richfield-flood-inundation-mce100.json', figure: '3-4', areaHa: 375, classes: null,
   },
   {
     id: 'rf_prioritization_score', name: 'Flood-Risk Prioritization Score',
-    file: 'richfield-flood-prioritization-score.json', figure: '4-7', areaHa: 308,
+    file: 'richfield-flood-prioritization-score.json', figure: '4-7', areaHa: 217,
     classes: ['0.0 - 2.4', '2.5 - 4.4', '4.5 - 6.4', '6.5 - 10'],
   },
 ];
@@ -147,7 +159,7 @@ export const RICHFIELD_FLOOD_SOURCE_URL =
  *
  * ⚠️ THESE POLYGONS ARE A FOOTPRINT, NOT A COUNT OF FLOOD-RISK AREAS.
  * The report states 746 flood-risk areas evaluated, 601 of them inside the
- * city. This layer carries 353 polygons. The difference is method, not loss of
+ * city. This layer carries 337 polygons. The difference is method, not loss of
  * coverage: contour tracing merges adjacent areas that share a score band into
  * one polygon, the morphological closing joins near neighbours, and specks under
  * 150 m² are dropped.
@@ -157,8 +169,8 @@ export const RICHFIELD_FLOOD_SOURCE_URL =
  *   ✗ do not try to join it to the report's FPA_#### identifiers
  *   ✓ do use it for where flood risk is and how severe, which is preserved
  *
- * (Nesting was verified as a separate check and passes: 2yr ⊆ 10yr ⊆ 100yr ⊆
- * MCE100, with only 0.4% / 0.8% / 7.2% of each smaller extent falling outside
+ * (Nesting was verified as a separate check before being enforced: 2yr ⊆ 10yr ⊆
+ * 100yr ⊆ MCE100, with only 0.4% / 0.9% / 10.1% of each smaller extent falling outside
  * the next larger — strong evidence the georeferencing and classification are
  * sound, since either being wrong would break containment badly.)
  *
